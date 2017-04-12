@@ -1,0 +1,3 @@
+[submodule "dwtc-geo-parser"]
+	path = dwtc-geo-parser
+	url = https://github.com/guenthermi/dwtc-geo-parser
