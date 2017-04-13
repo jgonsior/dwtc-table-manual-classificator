@@ -1,0 +1,1 @@
+from .tableBrowser import app

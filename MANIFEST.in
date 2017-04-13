@@ -1,0 +1,2 @@
+graft tableBrowser/templates
+graft tablesBrowser/static
