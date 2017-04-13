@@ -1,0 +1,23 @@
+{% macro pagination(pagination, endpoint) %}
+  <div class="text-center">
+    <ul class="pagination pagination-lg">
+  {%- for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+      <li class="">
+        <a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a>
+      </li>
+      {% else %}
+      <li class="active">
+        <a href="#">{{ page }}</a>
+      </li>
+      {% endif %}
+    {% else %}
+      <li class="">
+        <span class=ellipsis>…</span>
+      </li<
+    {% endif %}
+  {%- endfor %}
+</ul>
+  </div>
+{% endmacro %}

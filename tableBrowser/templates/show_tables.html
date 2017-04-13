@@ -1,28 +1,15 @@
-{% extends "layout.html" %} {% block body %}
-{% macro render_pagination(pagination, endpoint) %}
-  <div class="text-center">
-    <ul class="pagination pagination-lg">
-  {%- for page in pagination.iter_pages() %}
-    {% if page %}
-      {% if page != pagination.page %}
-      <li class="">
-        <a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a>
-      </li>
-      {% else %}
-      <li class="active">
-        <a href="#">{{ page }}</a>
-      </li>
-      {% endif %}
-    {% else %}
-      <li class="disabled">
-        <span class=ellipsis>…</span>
-      </li<
-    {% endif %}
-  {%- endfor %}
-</ul>
-  </div>
-{% endmacro %}
+{%- extends "layout.html" %}
 
+{% block navbar %}
+{% import '_helpers.html' as helpers %}
+<nav class="navbar navbar-default navbar-fixed-top">
+  {{ helpers.pagination(entries, 'showTables') }}
+</nav>
+{%- endblock %}
+
+
+{% block content %}
+<div class="container">
 <ul class=tables>
     {% for entry in entries.items %}
     <li>
@@ -32,7 +19,5 @@
         <li><em>Unbelievable.  No tables here so far</em> {% endfor %}
         </li>
 </ul>
-
-{{ render_pagination(entries, 'showTables') }}
-
-{% endblock %}
+</div>
+{%- endblock %}
