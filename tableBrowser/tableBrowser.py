@@ -55,7 +55,7 @@ def initdbCommand(sourcefile):
                           rawData['title'], rawData['tableType'],
                           ujson.dumps(rawData['relation']))
             db.session.add(table)
-        #could be optimized, but only if needed to :)
+        # could be optimized, but only if needed to :)
         db.session.commit()
 
     print('Initialized the database')
@@ -70,7 +70,6 @@ def showTables(page=1):
 
 @app.route('/show/<int:tableId>')
 def showTable(tableId):
-    c = get_db().execute('SELECT * FROM tables WHERE id=(?)', (tableId,))
-    meta = c.fetchone()
-    table = ujson.loads(meta['cells'])
+    meta = Table.query.get(tableId)
+    table = ujson.loads(meta.cells)
     return render_template('show_table.html', meta=meta, table=table)
