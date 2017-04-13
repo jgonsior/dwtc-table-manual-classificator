@@ -36,8 +36,13 @@ def close_db(error):
 
 
 @app.route('/')
-def show_tables():
+def showTables():
     db = get_db()
     c = db.execute('SELECT * FROM tables LIMIT 100')
     entries = c.fetchall()
     return render_template('show_tables.html', entries=entries)
+
+@app.route('/show/<int:tableId>')
+def showTable(tableId):
+    c = get_db().execute('SELECT * FROM tables WHERE id="?"', (tableId,))
+    return c

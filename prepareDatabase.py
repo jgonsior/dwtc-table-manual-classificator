@@ -27,9 +27,9 @@ argv = sys.argv
 if argc > 1:
     # first unzip file
     with gzip.open(argv[1], "rb") as file:
-        #then iterate over it line by line
+        # then iterate over it line by line
         for line in file:
-            #and finally save each entry into a new database
+            # and finally save each entry into a new database
             rawData = ujson.loads(line)
             data = (rawData['pageTitle'], rawData['url'], rawData['title'],
                     rawData['tableType'], ujson.dumps(rawData['relation']))
