@@ -1,3 +1,0 @@
-[submodule "tableBrowser/static/bootstrap"]
-	path = tableBrowser/static/bootstrap
-	url = https://github.com/twbs/bootstrap.git
