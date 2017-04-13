@@ -33,3 +33,11 @@ def close_db(error):
     """Closes the database again at the end of the request."""
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
+
+
+@app.route('/')
+def show_tables():
+    db = get_db()
+    c = db.execute('SELECT * FROM tables LIMIT 100')
+    entries = c.fetchall()
+    return render_template('show_tables.html', entries=entries)

@@ -10,5 +10,6 @@ neovim==0.1.13
 packaging==16.8
 pyparsing==2.2.0
 six==1.10.0
+-e git+git@github.com:jgonsior/dwtc-table-browser.git@afcd8d851a14ca7b551adade16b01d4c30050063#egg=tableBrowser
 ujson==1.35
 Werkzeug==0.12.1
