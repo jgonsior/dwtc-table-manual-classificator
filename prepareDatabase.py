@@ -8,7 +8,7 @@ from pprint import pprint
 
 HELP_TEXT = '\033[1mexample.py\033[0m dump'
 
-DB_OUTPUT = 'data.db'
+DB_OUTPUT = 'tableBrowser/data.db'
 connection = sqlite3.connect(DB_OUTPUT)
 c = connection.cursor()
 c.execute('''CREATE TABLE tables (
