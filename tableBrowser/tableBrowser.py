@@ -63,7 +63,7 @@ def initdbCommand(sourcefile):
 
 @app.route('/')
 def showTables():
-    entries = Table.query.limit(100).all()
+    entries = db.session.query(Table).paginate(1, 100)
     return render_template('show_tables.html', entries=entries)
 
 
