@@ -1,0 +1,19 @@
+{% extends "layout.html" %} {% block body %}
+<div class=table>
+    {% if meta %}
+    <h2>{{ meta.id }} | <a href="{{ meta.url }}">{{ meta.pageTitle }}</a></h2>{{ meta.text|safe }}
+    <p>{{ meta.tableType }}</p>
+    {% else %}
+    <em>Unbelievable.  No table found!</em> {% endif %}
+    <table>
+        {% for row in table %}
+        <tr>
+            {% for cell in row %}
+            <td>{{cell}}</td>
+            {% endfor%}
+        </tr>
+        {% endfor%}
+    </table>
+
+</div>
+{% endblock %}
