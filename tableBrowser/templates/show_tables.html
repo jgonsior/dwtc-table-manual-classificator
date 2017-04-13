@@ -2,9 +2,12 @@
 {% block body %}
   <ul class=tables>
   {% for entry in entries %}
-    <li><h2>{{ entry.pageTitle }}</h2>{{ entry.text|safe }}
+    <li>
+			<h2>{{ entry.id }} | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
+			<p>{{ entry.tableType }}</p>
   {% else %}
     <li><em>Unbelievable.  No tables here so far</em>
   {% endfor %}
+		</li>
   </ul>
 	{% endblock %}
