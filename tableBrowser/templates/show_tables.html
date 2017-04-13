@@ -1,23 +1,30 @@
 {% extends "layout.html" %} {% block body %}
 {% macro render_pagination(pagination, endpoint) %}
-  <div class=pagination>
+  <div class="text-center">
+    <ul class="pagination pagination-lg">
   {%- for page in pagination.iter_pages() %}
     {% if page %}
       {% if page != pagination.page %}
+      <li class="">
         <a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a>
+      </li>
       {% else %}
-        <strong>{{ page }}</strong>
+      <li class="active">
+        <a href="#">{{ page }}</a>
+      </li>
       {% endif %}
     {% else %}
-      <span class=ellipsis>…</span>
+      <li class="disabled">
+        <span class=ellipsis>…</span>
+      </li<
     {% endif %}
   {%- endfor %}
+</ul>
   </div>
 {% endmacro %}
 
-
 <ul class=tables>
-    {% for entry in entries %}
+    {% for entry in entries.items %}
     <li>
         <h2>{{ entry.id }} | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
         <p>{{ entry.tableType }}</p>
@@ -25,4 +32,7 @@
         <li><em>Unbelievable.  No tables here so far</em> {% endfor %}
         </li>
 </ul>
+
+{{ render_pagination(entries, 'showTables') }}
+
 {% endblock %}
