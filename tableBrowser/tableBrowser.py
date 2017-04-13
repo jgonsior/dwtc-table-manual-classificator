@@ -3,9 +3,11 @@ import sqlite3
 import ujson
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash
+from flask_bootstrap import Bootstrap
 from pprint import pprint
 
 app = Flask(__name__)  # create the application instance :)
+Bootstrap(app)
 app.config.from_object(__name__)  # load config from this file
 
 # Load default config and override config from an environment variable
