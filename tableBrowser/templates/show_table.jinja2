@@ -17,7 +17,6 @@
 </div>
 {%- endblock %} {% block content %} {% if meta %}
 <h2 type={{meta.tableType}}>{{ meta.id }} | <a href="{{ meta.url }}">{{ meta.pageTitle }}</a></h2>{{ meta.text|safe }}
-<p>{{ meta.tableType }}</p>
 {% else %}
 <em>Unbelievable.  No table found!</em> {% endif %}
 <table class="table table-bordered {{ meta.tableType }}">

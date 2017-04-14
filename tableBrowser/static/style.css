@@ -19,7 +19,7 @@
 }
 
 .ENTITY-hover tr:nth-of-type(even) {
-    background: rgba(255, 255, 136, 1);
+    background: rgba(255, 255, 0, 1);
 }
 
 .MATRIX-hover td:nth-of-type(even), .MATRIX-hover tr:nth-of-type(even) {

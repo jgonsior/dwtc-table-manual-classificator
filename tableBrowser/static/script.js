@@ -6,6 +6,7 @@ function toggleClasses(className) {
     $('table').addClass(className);
 }
 $(document).ready(function() {
+    $('#classificationButtons button:contains(' + $('h2').attr('type') +')').addClass('btn-primary');
     var originalClass
     $('#classificationButtons button').hover(function() {
         $('table').addClass($(this).text() + '-hover');
