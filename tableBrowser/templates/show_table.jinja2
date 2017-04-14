@@ -3,8 +3,8 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="navbar-header">
             <ul class="pagination pagination-lg">
-                <li><a href="{{ url_for('showTable', tableId=meta.id-1) }}">Prev</a></li>
-                <li><a href="{{ url_for('showTable', tableId=meta.id+1) }}">Next</a></li>
+                <li><a id="prev" href="{{ url_for('showTable', tableId=meta.id-1) }}">Prev</a></li>
+                <li><a id="next" href="{{ url_for('showTable', tableId=meta.id+1) }}">Next</a></li>
             </ul>
         </div>
         <ul id="classificationButtons" class="pagination pagination-lg" class="btn-group" role="group" aria-label="...">
