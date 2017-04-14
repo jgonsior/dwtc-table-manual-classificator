@@ -1,15 +1,31 @@
-.RELATION td:nth-of-type(odd) {
+.RELATION td:nth-of-type(even) {
     background: rgba(255, 255, 136, 0.5);
 }
 
-.ENTITY tr:nth-of-type(odd) {
+.ENTITY tr:nth-of-type(even) {
     background: rgba(255, 255, 136, 0.5);
 }
 
-.MATRIX td:nth-of-type(odd), .MATRIX tr:nth-of-type(odd) {
+.MATRIX td:nth-of-type(even), .MATRIX tr:nth-of-type(even) {
     background: rgba(255, 255, 136, 0.5);
 }
 
 .OTHER td {
-  background: rgba(34, 139, 34, 0.3)
+    background: rgba(34, 139, 34, 0.3)
+}
+
+.RELATION-hover td:nth-of-type(even) {
+    background: rgba(255, 136, 255, 1);
+}
+
+.ENTITY-hover tr:nth-of-type(even) {
+    background: rgba(255, 255, 136, 1);
+}
+
+.MATRIX-hover td:nth-of-type(even), .MATRIX-hover tr:nth-of-type(even) {
+    background: rgba(136, 255, 255, 1);
+}
+
+.OTHER-hover td {
+    background: rgba(34, 139, 34, 1)
 }
