@@ -1,5 +1,18 @@
 {% extends "layout.html" %}
+
+{% block navbar %}
+<div class="text-center">
+    <nav class="navbar navbar-default navbar-static-top">
+        <ul class="pagination pagination-lg">
+            <li><a href="{{ url_for('showTable', tableId=meta.id-1) }}">Prev</a></li>
+            <li><a href="{{ url_for('showTable', tableId=meta.id+1) }}">Next</a></li>
+        </ul>
+    </nav>
+</div>
+{%- endblock %}
 {% block content %}
+
+
 <div class=table>
     {% if meta %}
     <h2>{{ meta.id }} | <a href="{{ meta.url }}">{{ meta.pageTitle }}</a></h2>{{ meta.text|safe }}
