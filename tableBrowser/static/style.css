@@ -1,0 +1,15 @@
+.RELATION td:nth-of-type(odd) {
+    background: rgba(255, 255, 136, 0.5);
+}
+
+.ENTITY tr:nth-of-type(odd) {
+    background: rgba(255, 255, 136, 0.5);
+}
+
+.MATRIX td:nth-of-type(odd), .MATRIX tr:nth-of-type(odd) {
+    background: rgba(255, 255, 136, 0.5);
+}
+
+.OTHER td {
+  background: rgba(34, 139, 34, 0.3)
+}
