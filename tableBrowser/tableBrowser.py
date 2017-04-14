@@ -65,11 +65,11 @@ def initdbCommand(sourcefile):
 @app.route('/<int:page>')
 def showTables(page=1):
     entries = db.session.query(Table).paginate(page, 100)
-    return render_template('show_tables.html', entries=entries)
+    return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:tableId>')
 def showTable(tableId):
     meta = Table.query.get(tableId)
     table = ujson.loads(meta.cells)
-    return render_template('show_table.html', meta=meta, table=table)
+    return render_template('show_table.jinja2', meta=meta, table=table)
