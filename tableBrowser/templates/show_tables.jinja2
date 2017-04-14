@@ -1,7 +1,7 @@
-{%- extends "layout.html" %}
+{%- extends "layout.jinja2" %}
 
 {% block navbar %}
-{% import '_helpers.html' as helpers %}
+{% import '_helpers.jinja2' as helpers %}
 <nav class="navbar navbar-default navbar-static-top">
   {{ helpers.pagination(entries, 'showTables') }}
 </nav>
