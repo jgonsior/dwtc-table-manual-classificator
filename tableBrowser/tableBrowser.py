@@ -78,4 +78,7 @@ def showTable(tableId):
 
 @app.route('/changeClass/<int:tableId>/<string:newTableType>')
 def changeClass(tableId, newTableType):
+    table = Table.query.get(tableId)
+    table.newTableType = newTableType
+    db.session.commit()
     return ujson.dumps({'success': True}), 200, {'ContentType': 'application/json'}
