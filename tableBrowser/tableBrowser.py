@@ -25,14 +25,16 @@ class Table(db.Model):
     pageTitle = db.Column(db.Text)
     url = db.Column(db.Text)
     title = db.Column(db.Text)
-    tableType = db.Column(db.Text)
+    originalTableType = db.Column(db.Text)
     cells = db.Column(db.Text)
+    newTableType = db.Column(db.Text)
 
-    def __init__(self, pageTitle, url, title, tableType, cells):
+
+    def __init__(self, pageTitle, url, title, originalTableType, cells):
         self.pageTitle = pageTitle
         self.url = url
         self.title = title
-        self.tableType = tableType
+        self.originalTableType = originalTableType
         self.cells = cells
 
     def __repr__(self):

@@ -14,7 +14,7 @@
     {% for entry in entries.items %}
     <li>
         <h2><a href="{{ url_for('showTable', tableId=entry.id) }}">{{ entry.id }}</a> | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
-        <p>{{ entry.tableType }}</p>
+        <p>{{ entry.originalTableType }}</p>
         {% else %}
         <li><em>Unbelievable.  No tables here so far</em> {% endfor %}
         </li>
