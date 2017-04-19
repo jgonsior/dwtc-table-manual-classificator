@@ -74,3 +74,8 @@ def showTable(tableId):
     meta = Table.query.get(tableId)
     table = ujson.loads(meta.cells)
     return render_template('show_table.jinja2', meta=meta, table=table)
+
+
+@app.route('/changeClass/<int:tableId>/<string:newTableType>')
+def changeClass(tableId, newTableType):
+    return ujson.dumps({'success': True}), 200, {'ContentType': 'application/json'}

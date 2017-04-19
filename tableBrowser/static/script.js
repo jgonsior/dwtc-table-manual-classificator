@@ -29,7 +29,8 @@ $(document).ready(function() {
   $('#classificationButtons button').click(function() {
     var newClass = $(this).text();
     var jqxhr = $.ajax("/changeClass/" + id + '/' + newClass)
-      .done(function() {
+      .success(function() {
+        console.log("Marked " + id + " as " + newClass);
         window.location = $('#next').attr('href');
       }).fail(function() {
         alert("error");
