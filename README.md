@@ -9,4 +9,4 @@ A tool for manual classification of dwtc tables. The result can then be used as 
 3. `flask initDb data/dwtc-000.json.gz` to initially put the downloaded dwtc tables into the SQLite database
 4. Run the program with `./start.sh`
 5. Go to http://127.0.0.1:5000/
-6. Have fun classifiying 😊
+6. Have fun classifiying ☺️
