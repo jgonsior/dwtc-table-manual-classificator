@@ -29,7 +29,6 @@ class Table(db.Model):
     cells = db.Column(db.Text)
     newTableType = db.Column(db.Text)
 
-
     def __init__(self, pageTitle, url, title, originalTableType, cells):
         self.pageTitle = pageTitle
         self.url = url
