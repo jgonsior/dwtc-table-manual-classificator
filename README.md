@@ -14,6 +14,6 @@ A tool for manual classification of dwtc tables. The result can then be used as 
 ## License
 Unless explicitly noted otherwise, the content of this package is released under the [GNU Affero General Public License version 3 (AGPLv3)](http://www.gnu.org/licenses/agpl.html)
 
-[Why the GNU Affero GPL](http://www.gnu.org/licenses/why-affero-gpl.html)
+[Why the GNU Affero GPL](http://www.gnu.org/licenses/why-affero-gpl.html) (short answer: why not?)
 
 Copyright © 2017 [Julius Gonsior](https://gaenseri.ch/) 
