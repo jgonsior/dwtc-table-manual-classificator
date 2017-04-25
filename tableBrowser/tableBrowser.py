@@ -8,6 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from pprint import pprint
+from collections import defaultdict
 
 app = Flask(__name__)  # create the application instance :)
 Bootstrap(app)
@@ -49,13 +50,17 @@ def initdbCommand(sourcefile):
     # first unzip file
     with gzip.open(sourcefile, "rb") as file:
         # then iterate over it line by line
+        # saving only a maximum of 5000 tables of each kind
+        tableLimits = defaultdict(int)
         for line in file:
             # and finally save each entry into a new database
             rawData = ujson.loads(line)
-            table = Table(rawData['pageTitle'], rawData['url'],
-                          rawData['title'], rawData['tableType'],
-                          ujson.dumps(rawData['relation']))
-            db.session.add(table)
+            if tableLimits[rawData['tableType']] < 5000:
+                table = Table(rawData['pageTitle'], rawData['url'],
+                              rawData['title'], rawData['tableType'],
+                              ujson.dumps(rawData['relation']))
+                db.session.add(table)
+                tableLimits[rawData['tableType']] += 1
         # could be optimized, but only if needed to :)
         db.session.commit()
 
