@@ -16,6 +16,7 @@ app.config.from_object(__name__)  # load config from this file
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = False
 db = SQLAlchemy(app)
 
 app.config.from_envvar('TABLE_BROWSER_SETTINGS', silent=True)
@@ -42,8 +43,9 @@ class Table(db.Model):
 
 
 @app.cli.command('initDb')
-@click.argument('sourceFile')
-def initdbCommand(sourcefile):
+@click.argument('sourcefile', nargs=1)
+@click.argument('tabletype', nargs=1)
+def initdbCommand(sourcefile, tabletype):
     """Initializes the database."""
     db.create_all()
 
@@ -51,16 +53,14 @@ def initdbCommand(sourcefile):
     with gzip.open(sourcefile, "rb") as file:
         # then iterate over it line by line
         # saving only a maximum of 5000 tables of each kind
-        tableLimits = defaultdict(int)
         for line in file:
             # and finally save each entry into a new database
             rawData = ujson.loads(line)
-            if tableLimits[rawData['tableType']] < 5000:
+            if(rawData['tableType'] == tabletype):
                 table = Table(rawData['pageTitle'], rawData['url'],
                               rawData['title'], rawData['tableType'],
                               ujson.dumps(rawData['relation']))
                 db.session.add(table)
-                tableLimits[rawData['tableType']] += 1
         # could be optimized, but only if needed to :)
         db.session.commit()
 
@@ -86,4 +86,5 @@ def changeClass(tableId, newTableType):
     table = Table.query.get(tableId)
     table.newTableType = newTableType
     db.session.commit()
-    return ujson.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+    return ujson.dumps({'success': True}), 200, \
+        {'ContentType': 'application/json'}
