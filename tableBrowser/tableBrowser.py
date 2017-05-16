@@ -68,8 +68,8 @@ def initdbCommand(sourcedirectory):
                     # and finally save each entry into a new database
                     rawData = ujson.loads(line)
                     counter[rawData['tableType']] += 1
-                    domain = "{0.scheme}://{0.netloc}/"
-                    .format(urlsplit(rawData['url']))
+                    domain = "{0.scheme}://{0.netloc}/"\
+                        .format(urlsplit(rawData['url']))
                     domainLimit[domain] += 1
                     if(counter[rawData['tableType']] < 2000
                        and domainLimit[domain] < 100):

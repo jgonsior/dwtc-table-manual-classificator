@@ -29,3 +29,11 @@
 .OTHER-hover td {
     background: rgba(34, 139, 34, 1)
 }
+
+.RELATION_H tr:nth-of-type(even) {
+    background: rgba(255, 255, 136, 0.5);
+}
+
+.RELATION_H-hover tr:nth-of-type(even) {
+    background: rgba(255, 255, 0, 1);
+}

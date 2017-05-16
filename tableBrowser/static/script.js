@@ -1,6 +1,7 @@
 function toggleClasses(className) {
   $('table').removeClass('ENTITY');
   $('table').removeClass('RELATION');
+  $('table').removeClass('RELATION_V');
   $('table').removeClass('MATRIX');
   $('table').removeClass('OTHER');
   $('table').addClass(className);
