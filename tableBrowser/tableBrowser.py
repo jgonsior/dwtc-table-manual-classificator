@@ -9,6 +9,9 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from pprint import pprint
 from collections import defaultdict
+import glob
+from random import random
+from urllib.parse import urlsplit
 
 app = Flask(__name__)  # create the application instance :)
 Bootstrap(app)
@@ -43,26 +46,40 @@ class Table(db.Model):
 
 
 @app.cli.command('initDb')
-@click.argument('sourcefile', nargs=1)
-@click.argument('tabletype', nargs=1)
-def initdbCommand(sourcefile, tabletype):
+@click.argument('sourcedirectory', nargs=1)
+def initdbCommand(sourcedirectory):
     """Initializes the database."""
     db.create_all()
 
+    counter = defaultdict(int)
+    domainLimit = defaultdict(int)
+
     # first unzip file
-    with gzip.open(sourcefile, "rb") as file:
-        # then iterate over it line by line
-        # saving only a maximum of 5000 tables of each kind
-        for line in file:
-            # and finally save each entry into a new database
-            rawData = ujson.loads(line)
-            if(rawData['tableType'] == tabletype):
-                table = Table(rawData['pageTitle'], rawData['url'],
-                              rawData['title'], rawData['tableType'],
-                              ujson.dumps(rawData['relation']))
-                db.session.add(table)
-        # could be optimized, but only if needed to :)
-        db.session.commit()
+    for filename in glob.glob(os.path.join(sourcedirectory, '*.json.gz')):
+        print("Start processing " + filename)
+        with gzip.open(filename, "rb") as file:
+            chances_selected = 20 / sum(1 for line in file)
+
+        with gzip.open(filename, "rb") as file:
+            # then randomly select 20 tables from each file -> 500*20= 10 000
+            # saving only a maximum of 100 tables of each domain
+            for line in file:
+                if random() < chances_selected:
+                    # and finally save each entry into a new database
+                    rawData = ujson.loads(line)
+                    counter[rawData['tableType']] += 1
+                    domain = "{0.scheme}://{0.netloc}/"
+                    .format(urlsplit(rawData['url']))
+                    domainLimit[domain] += 1
+                    if(counter[rawData['tableType']] < 2000
+                       and domainLimit[domain] < 100):
+                        table = Table(rawData['pageTitle'], rawData['url'],
+                                      rawData['title'], rawData['tableType'],
+                                      ujson.dumps(rawData['relation']))
+                        db.session.add(table)
+            db.session.commit()
+    pprint(counter)
+    pprint(domainLimit)
 
     print('Initialized the database')
 
