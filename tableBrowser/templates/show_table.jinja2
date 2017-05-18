@@ -18,8 +18,10 @@
 </div>
 {%- endblock %} {% block content %} {% if meta %}
 <h2 type={{meta.originalTableType}}>{{ meta.id }} | <a href="{{ meta.url }}">{{ meta.pageTitle }}</a></h2>{{ meta.text|safe }}
+<h3>{{meta.domain}}</h3>
 {% else %}
 <em>Unbelievable.  No table found!</em> {% endif %}
+
 <table class="table table-bordered {{ meta.originalTableType }}">
     {% for row in table %}
     <tr>

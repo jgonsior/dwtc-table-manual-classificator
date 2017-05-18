@@ -95,6 +95,9 @@ def showTables(page=1):
 def showTable(tableId):
     meta = Table.query.get(tableId)
     table = ujson.loads(meta.cells)
+
+    # should be moved into table class
+    meta.domain = "{0.scheme}://{0.netloc}/".format(urlsplit(meta.url))
     return render_template('show_table.jinja2', meta=meta, table=table)
 
 
