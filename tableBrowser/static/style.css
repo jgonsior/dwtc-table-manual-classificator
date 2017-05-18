@@ -2,10 +2,6 @@
     background: rgba(255, 255, 136, 0.5);
 }
 
-.ENTITY tr:nth-of-type(even) {
-    background: rgba(255, 255, 136, 0.5);
-}
-
 .MATRIX td:nth-of-type(even), .MATRIX tr:nth-of-type(even) {
     background: rgba(255, 255, 136, 0.5);
 }
@@ -18,10 +14,6 @@
     background: rgba(255, 136, 255, 1);
 }
 
-.ENTITY-hover tr:nth-of-type(even) {
-    background: rgba(255, 255, 0, 1);
-}
-
 .MATRIX-hover td:nth-of-type(even), .MATRIX-hover tr:nth-of-type(even) {
     background: rgba(136, 255, 255, 1);
 }
@@ -30,10 +22,10 @@
     background: rgba(34, 139, 34, 1)
 }
 
-.RELATION_H tr:nth-of-type(even) {
+.RELATION_V tr:nth-of-type(even) {
     background: rgba(255, 255, 136, 0.5);
 }
 
-.RELATION_H-hover tr:nth-of-type(even) {
+.RELATION_V-hover tr:nth-of-type(even) {
     background: rgba(255, 255, 0, 1);
 }

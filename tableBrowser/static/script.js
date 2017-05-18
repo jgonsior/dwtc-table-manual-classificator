@@ -9,7 +9,9 @@ function toggleClasses(className) {
 $(document).ready(function() {
   var originalClass = $('h2').attr('type');
   var id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-  $('#classificationButtons button:contains(' + $('h2').attr('type') + ')').addClass('btn-primary');
+  $('#classificationButtons button').filter(function() {
+    return $(this).text() === $('h2').attr('type');
+  }).addClass('btn-primary');
   $('#classificationButtons button').hover(function() {
     $('table').addClass($(this).text() + '-hover');
   }, function() {
