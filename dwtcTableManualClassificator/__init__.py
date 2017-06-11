@@ -1,0 +1,1 @@
+from .dwtcTableManualClassificator import app

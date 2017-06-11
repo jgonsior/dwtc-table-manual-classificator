@@ -1,2 +1,2 @@
-graft tableBrowser/templates
-graft tablesBrowser/static
+graft dwtcTableManualClassificator/templates
+graft dwtcTableManualClassificator/static
