@@ -1,4 +1,4 @@
-i# dwtc-table-manual-classificator
+# dwtc-table-manual-classificator
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 A tool for manual classification of dwtc tables. The result can then be used as a training data set.
