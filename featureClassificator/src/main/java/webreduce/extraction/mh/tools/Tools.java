@@ -20,7 +20,8 @@ public class Tools {
 	// variable which tracks the index of the Instance placed into
 	// the container so that the creation overhead of the Instances
 	// object is reduced)
-	public static Instance createInstanceFromData(HashMap<String, Double> featureResults, ArrayList<Attribute> attributes, FastVector attributesAsVector) {
+	public static Instance createInstanceFromData(HashMap<String, Double> featureResults,
+	                                              ArrayList<Attribute> attributes, FastVector attributesAsVector) {
 		
 		// unfortunately WEKA doesn't allow for standalone Instance objects without a dataset container
 		// that's why we need to keep a FastVector of Attributes to create an Instances object
@@ -66,7 +67,9 @@ public class Tools {
 		arffChooser.setFileFilter(filter);
 		if (arffChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			return arffChooser.getSelectedFile().getPath();
-		} else return null;
+		} else {
+			return null;
+		}
 		
 	}
 	
@@ -75,7 +78,9 @@ public class Tools {
 		Instances result = new Instances(inst);
 		for (int i = result.numAttributes() - 1; i >= 0; i--) {
 			Attribute temp = result.attribute(i);
-			if (temp.name().equals(attr.name()) || temp == result.classAttribute()) continue;
+			if (temp.name().equals(attr.name()) || temp == result.classAttribute()) {
+				continue;
+			}
 			result.deleteAttributeAt(i);
 		}
 		return result;
@@ -91,7 +96,9 @@ public class Tools {
 		Instances result = new Instances(inst);
 		for (int i = result.numAttributes() - 1; i >= 0; i--) {
 			Attribute temp = result.attribute(i);
-			if (names.contains(temp.name()) || temp == result.classAttribute()) continue;
+			if (names.contains(temp.name()) || temp == result.classAttribute()) {
+				continue;
+			}
 			result.deleteAttributeAt(i);
 		}
 		return result;

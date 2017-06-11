@@ -1,6 +1,7 @@
 package webreduce.extraction.mh.tools;
 
 public class TableStats {
+	
 	public int rowIndex;
 	public int colIndex;
 	private int tableWidth;
@@ -10,7 +11,7 @@ public class TableStats {
 		this.tableHeight = height;
 		this.tableWidth = width;
 	}
-
+	
 	public int getTableWidth() {
 		return tableWidth;
 	}

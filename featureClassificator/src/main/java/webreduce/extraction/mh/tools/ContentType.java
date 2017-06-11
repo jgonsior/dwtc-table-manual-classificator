@@ -13,3 +13,4 @@ public enum ContentType {
 	EMPTY,
 	OTHERS
 }
+

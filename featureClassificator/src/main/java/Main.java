@@ -1,13 +1,20 @@
+import com.google.common.base.Optional;
 import org.json.JSONArray;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import webreduce.extraction.mh.features.FeaturesP2;
+import webreduce.extraction.mh.tools.TableConvert;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 	
 	public static void main(String[] args) {
 		try {
+			FeaturesP2 phase2Features = new FeaturesP2();
+			TableConvert tableConvert = new TableConvert(2,2);
+			
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
 			Statement statement = connection.createStatement();
@@ -40,14 +47,42 @@ public class Main {
 				System.out.println("New table type: " + resultSet.getString(2) + ": " + resultSet.getInt(1));
 			}
 			
-			//parse database json contents
 			resultSet = statement.executeQuery("SELECT * FROM `table`");
 			
-			Map<Integer, JSONArray> tables = new HashMap<Integer, JSONArray>();
 			while(resultSet.next()) {
-				tables.put(resultSet.getInt("id"), new JSONArray(resultSet.getString("cells")));
+				
+				//parse database json contents
+				JSONArray jsonArrayTable = new JSONArray(resultSet.getString("cells"));
+				
+				//convert json to html code
+				String htmlTable = "<table>";
+				for(int i=0; i<jsonArrayTable.length(); i++) {
+					htmlTable += "<tr>";
+					JSONArray row = jsonArrayTable.getJSONArray(i);
+					for(int j=0; j<row.length(); j++) {
+						String cell = row.getString(j);
+						htmlTable += "<td>" + cell+ "</td>";
+					}
+					htmlTable += "</tr>";
+				}
+				htmlTable += "</table>";
+				
+				//let jsoup parse the html code again
+				Document document = Jsoup.parse(htmlTable);
+				
+				Element table = document.select("table").get(0);
+				Optional<Element[][]> convertedTable = tableConvert.toTable(table);
+				if(!convertedTable.isPresent()) {
+					System.out.println("No converted table present…exiting because computer is sad…");
+					return;
+				}
+				
+				
+				
+				
+				System.out.println("test");
+				
 			}
-			
 			
 			
 		} catch (ClassNotFoundException e) {

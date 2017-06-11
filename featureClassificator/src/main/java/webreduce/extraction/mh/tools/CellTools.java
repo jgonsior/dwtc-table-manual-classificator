@@ -38,7 +38,7 @@ public class CellTools {
 				// characters within the content string
 				int alphaCount = 0, digitCount = 0;
 				for (char c : cellStr.toCharArray()) {
-					if (Character.isAlphabetic((int) c)) {
+					if (Character.isAlphabetic(c)) {
 						alphaCount++;
 					} else if (Character.isDigit(c)) {
 						digitCount++;
