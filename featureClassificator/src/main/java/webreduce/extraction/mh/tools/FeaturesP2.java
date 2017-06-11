@@ -1,4 +1,4 @@
-package webreduce.extraction.mh.features;
+package webreduce.extraction.mh.tools;
 
 /*
  * Class contains only feature calculations for phase 2
@@ -6,9 +6,6 @@ package webreduce.extraction.mh.features;
  */
 
 import org.jsoup.nodes.Element;
-import webreduce.extraction.mh.tools.CellTools;
-import webreduce.extraction.mh.tools.ContentType;
-import webreduce.extraction.mh.tools.TableStats;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -29,23 +26,6 @@ public class FeaturesP2 {
 	private FastVector classAttrVector; // vector of strings of all possible class values
 	private Attribute classAttr;
 	
-	public static List<String> getFeatureNames() {
-		return Arrays.asList(featureWhiteList.split(", "));
-	}
-	
-	
-	// returns a FastVector containing all attributes plus
-	// the class attribute as the last element
-	public FastVector getAttrVector() {
-		return attributeVector;
-	}
-	
-	// returns a FastVector that contains all possible class
-	// values, each represented as a String
-	public FastVector getClassVector() {
-		return classAttrVector;
-	}
-	
 	public FeaturesP2() {
 		attributeList = new ArrayList<Attribute>();
 		attributeVector = new FastVector();
@@ -64,6 +44,22 @@ public class FeaturesP2 {
 		classAttr = new Attribute("CLASS", classAttrVector);
 		
 		attributeVector.addElement(classAttr);
+	}
+	
+	public static List<String> getFeatureNames() {
+		return Arrays.asList(featureWhiteList.split(", "));
+	}
+	
+	// returns a FastVector containing all attributes plus
+	// the class attribute as the last element
+	public FastVector getAttrVector() {
+		return attributeVector;
+	}
+	
+	// returns a FastVector that contains all possible class
+	// values, each represented as a String
+	public FastVector getClassVector() {
+		return classAttrVector;
 	}
 	
 	// returns an ArrayList of all attributes that
@@ -156,7 +152,7 @@ public class FeaturesP2 {
 				listener.end();
 			}
 			
-			// compute results of all listeners, rename them and put them 
+			// compute results of all listeners, rename them and put them
 			// into the result map
 			for (AbstractTableListener listener : localListeners) {
 				HashMap<String, Double> results = listener.getResults();
@@ -195,7 +191,7 @@ public class FeaturesP2 {
 				listener.end();
 			}
 			
-			// compute results of all listeners, rename them and put them 
+			// compute results of all listeners, rename them and put them
 			// into the result map
 			for (AbstractTableListener listener : localListeners) {
 				HashMap<String, Double> results = listener.getResults();
@@ -211,7 +207,7 @@ public class FeaturesP2 {
 		// Create WEKA instance
 
 //		Instance resultInstance = new Instance(featureCount);
-//		
+//
 //		// only use features within whitelist
 //		for (String entry : resultMap.keySet()) {
 //			if (featureWhiteList.contains(entry)) {
@@ -272,15 +268,15 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			
+		
 		}
 		
 		public void onCell(Element content, TableStats stats) {
-			
+		
 		}
 		
 		public void finalize() {
-			
+		
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -302,11 +298,11 @@ public class FeaturesP2 {
 		}
 		
 		public void onCell(Element content, TableStats stats) {
-			
+		
 		}
 		
 		public void finalize() {
-			
+		
 		}
 		
 		public HashMap<String, Double> getResults() {
