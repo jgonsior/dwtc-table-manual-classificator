@@ -3,7 +3,7 @@ data/
 *.db
 
 .gradle
-
+*.iml
 
 
 # Byte-compiled / optimized / DLL files
