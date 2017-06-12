@@ -4,6 +4,9 @@ data/
 
 .gradle
 *.iml
+out/
+*.mdl
+*.arff
 
 
 # Byte-compiled / optimized / DLL files
