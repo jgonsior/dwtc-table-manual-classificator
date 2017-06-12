@@ -3,6 +3,7 @@ import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import webreduce.extraction.mh.TableClassification;
 import webreduce.extraction.mh.features.FeaturesP2;
 import webreduce.extraction.mh.tools.TableConvert;
 import weka.core.Instance;
@@ -85,7 +86,11 @@ public class Main {
 					return;
 				}
 				
-				//calculate all the features and transform them into a weka readable format :)
+				TableClassification tableClassification = new TableClassification("/SimpleCart_P1.mdl",
+						"/RandomForest_P2.mdl");
+				System.out.println("Predicted class: " + tableClassification.classifyTable(convertedTable.get()));
+				
+				//calculate all the features and transform them into a weka readable format :)*/
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
 				instances.add(instance);
 			}
@@ -101,15 +106,8 @@ public class Main {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
-/*
- 
- for (int j = 0; j < attribute.numValues(); j++) {
- System.out.println(attribute.numValues());
- System.out.println(currentInstance.numAttributes());
- System.out.println(attribute);
- System.out.println(attribute.name() + ": " + attribute.value(j));
- }
- */
