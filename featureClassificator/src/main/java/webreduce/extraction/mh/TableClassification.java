@@ -13,8 +13,6 @@ import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.Instance;
 
-import java.io.InputStream;
-
 
 public class TableClassification {
 	
@@ -68,8 +66,7 @@ public class TableClassification {
 	}
 	
 	public static Classifier loadModelFromClasspath(String path) throws Exception {
-		InputStream stream = TableClassification.class.getResourceAsStream(path);
-		return (Classifier) weka.core.SerializationHelper.read(stream);
+		return (Classifier) weka.core.SerializationHelper.read(path);
 	}
 	
 	// Returns classification as TableType from given

@@ -11,7 +11,6 @@ import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 
 public class Main {
@@ -86,11 +85,11 @@ public class Main {
 					return;
 				}
 				
-				TableClassification tableClassification = new TableClassification("/SimpleCart_P1.mdl",
-						"/RandomForest_P2.mdl");
+				TableClassification tableClassification = new TableClassification("SimpleCart_P1.mdl",
+						"RandomForest_P2.mdl");
 				System.out.println("Predicted class: " + tableClassification.classifyTable(convertedTable.get()));
 				
-				//calculate all the features and transform them into a weka readable format :)*/
+				//calculate all the features and transform them into a weka readable format :)
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
 				instances.add(instance);
 			}
@@ -98,15 +97,13 @@ public class Main {
 			ArffSaver arffSaver = new ArffSaver();
 			arffSaver.setInstances(instances);
 			arffSaver.setFile(new File("test.arff"));
-			arffSaver.writeBatch();
+			//arffSaver.writeBatch();
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+		}  catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
