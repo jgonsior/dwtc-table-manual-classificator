@@ -55,7 +55,7 @@ public class Main {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table`");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
 			
 			while (resultSet.next()) {
 				
