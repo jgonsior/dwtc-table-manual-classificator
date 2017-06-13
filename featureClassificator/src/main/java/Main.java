@@ -43,8 +43,8 @@ public class Main {
 			
 			preparedStatement.executeUpdate();
 			
-			preparedStatement.setString(1, "RELATIONSHIP");
-			preparedStatement.setString(2, "RELATION");
+			preparedStatement.setString(1, "RELATION");
+			preparedStatement.setString(2, "RELATIONSHIP");
 			
 			preparedStatement.executeUpdate();
 			
@@ -55,7 +55,7 @@ public class Main {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` LIMIT 30");
+			resultSet = statement.executeQuery("SELECT * FROM `table`");
 			
 			while (resultSet.next()) {
 				
@@ -87,17 +87,42 @@ public class Main {
 				
 				TableClassification tableClassification = new TableClassification("SimpleCart_P1.mdl",
 						"RandomForest_P2.mdl");
-				System.out.println("Predicted class: " + tableClassification.classifyTable(convertedTable.get()));
+				//System.out.println("Predicted class: " + tableClassification.classifyTable(convertedTable.get()).getTableType() + "|" + resultSet.getString("newTableType"));
 				
 				//calculate all the features and transform them into a weka readable format :)
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
+				
+				//@TODO: should be changed to an enum!
+				
+				//set new class
+				int classAttribute = -1;
+				
+				switch(resultSet.getString("newTableType")) {
+					case "ENTITY":
+						classAttribute = 2;
+						break;
+					case "RELATION":
+					case "RELATION_V":
+						classAttribute = 1;
+						break;
+					case "MATRIX":
+						classAttribute = 3;
+						break;
+					case "OTHER":
+						classAttribute = 4;
+						break;
+				}
+				
+				instance.setValue(instance.classAttribute(), classAttribute);
+			
 				instances.add(instance);
+				
 			}
 			
 			ArffSaver arffSaver = new ArffSaver();
 			arffSaver.setInstances(instances);
 			arffSaver.setFile(new File("test.arff"));
-			//arffSaver.writeBatch();
+			arffSaver.writeBatch();
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

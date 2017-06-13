@@ -44,7 +44,7 @@ public class FeaturesP2 {
 		classAttrVector.addElement("RELATION");
 		classAttrVector.addElement("ENTITY");
 		classAttrVector.addElement("MATRIX");
-		classAttrVector.addElement("NONE");
+		classAttrVector.addElement("OTHER");
 		classAttr = new Attribute("CLASS", classAttrVector);
 		
 		attributeVector.addElement(classAttr);
