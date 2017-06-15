@@ -13,13 +13,13 @@ import weka.core.converters.ArffSaver;
 import java.io.File;
 import java.sql.*;
 
-public class Main {
+public class CreateArff {
 	
 	public static void main(String[] args) {
 		try {
 			FeaturesP2 phase2Features = new FeaturesP2();
 			TableConvert tableConvert = new TableConvert(2, 2);
-			Instances instances = new Instances("TestInstances", phase2Features.getAttrVector(), 0);
+			Instances dataSet = new Instances("TestInstances", phase2Features.getAttrVector(), 0);
 			
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
@@ -115,13 +115,15 @@ public class Main {
 				
 				instance.setValue(instance.classAttribute(), classAttribute);
 			
-				instances.add(instance);
+				dataSet.add(instance);
+				
+				dataSet.setClassIndex(instance.classIndex());
 				
 			}
 			
 			ArffSaver arffSaver = new ArffSaver();
-			arffSaver.setInstances(instances);
-			arffSaver.setFile(new File("test.arff"));
+			arffSaver.setInstances(dataSet);
+			arffSaver.setFile(new File("data.arff"));
 			arffSaver.writeBatch();
 			
 		} catch (ClassNotFoundException e) {
