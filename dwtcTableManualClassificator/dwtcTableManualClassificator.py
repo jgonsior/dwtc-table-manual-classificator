@@ -84,6 +84,47 @@ def initdbCommand(sourcedirectory):
     print('Initialized the database')
 
 
+@app.cli.command('generateMoreTrainingData')
+@click.argument('sourcedirectory', nargs=1)
+@click.argument('tabletype', nargs=1)
+def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
+    """Initializes the database."""
+    db.create_all()
+
+    counter = defaultdict(int)
+    domainLimit = defaultdict(int)
+
+    # first unzip file
+    for filename in glob.glob(os.path.join(sourcedirectory, '*.json.gz')):
+        print("Start processing " + filename)
+        with gzip.open(filename, "rb") as file:
+            chances_selected = 200 / sum(1 for line in file)
+
+        i = 0
+
+        with gzip.open(filename, "rb") as file:
+            for line in file:
+                if random() < chances_selected:
+                    rawData = ujson.loads(line)
+                    counter[rawData['tableType']] += 1
+                    domain = "{0.scheme}://{0.netloc}/"\
+                        .format(urlsplit(rawData['url']))
+                    domainLimit[domain] += 1
+                    if(counter[rawData['tableType']] < 2000
+                       and domainLimit[domain] < 100
+                       and rawData['tableType'] == tabletype):
+                        table = Table(rawData['pageTitle'], rawData['url'],
+                                      rawData['title'], rawData['tableType'],
+                                      ujson.dumps(rawData['relation']))
+                        i += 1
+                        db.session.add(table)
+            db.session.commit()
+    pprint(counter)
+    pprint(domainLimit)
+
+    print('Added  ' + str(i) + ' more tables of type ' + tabletype)
+
+
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
