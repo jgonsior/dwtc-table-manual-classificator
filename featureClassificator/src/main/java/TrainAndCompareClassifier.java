@@ -2,11 +2,10 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
-import weka.core.converters.ArffLoader;
+import weka.core.converters.ConverterUtils.DataSource;
 
 import java.sql.SQLException;
 import java.util.Random;
-import java.io.File;
 
 /**
  * @author: Julius Gonsior
@@ -16,10 +15,9 @@ public class TrainAndCompareClassifier {
 	public static void main(String[] args) {
 		try {
 			
-			ArffLoader loader = new ArffLoader();
-			loader.setFile(new File("data.arff"));
-			Instances dataSet = loader.getStructure();
-			dataSet.setClassIndex(dataSet.instance(0).classIndex());
+			DataSource source = new DataSource("data.arff");
+			Instances dataSet = source.getDataSet();
+			dataSet.setClassIndex(dataSet.numAttributes()-1);
 			
 			// train new classifier
 			RandomForest randomForest = new RandomForest();
