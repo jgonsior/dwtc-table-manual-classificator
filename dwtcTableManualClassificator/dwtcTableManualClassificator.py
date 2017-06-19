@@ -19,7 +19,7 @@ app.config.from_object(__name__)  # load config from this file
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
 app.config.from_envvar('TABLE_BROWSER_SETTINGS', silent=True)
@@ -33,6 +33,7 @@ class Table(db.Model):
     originalTableType = db.Column(db.Text)
     cells = db.Column(db.Text)
     newTableType = db.Column(db.Text)
+    label = db.Column(db.Text)
 
     def __init__(self, pageTitle, url, title, originalTableType, cells):
         self.pageTitle = pageTitle
@@ -128,19 +129,28 @@ def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
-    entries = db.session.query(Table).paginate(page, 100)
+    #entries = db.session.query(Table).paginate(page, 100)
+    entries = db.session.query(Table).filter(Table.newTableType != Table.label).paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
-@app.route('/show/<int:tableId>')
-def showTable(tableId):
-    meta = Table.query.get(tableId)
+@app.route('/show/<int:pageId>')
+def showTable(pageId):
+    #entries = db.session.query(Table).paginate(pageId, 1)
+    entries = db.session.query(Table).filter(Table.newTableType != Table.label).paginate(pageId, 1)
+    meta = entries.items[0]
     table = ujson.loads(meta.cells)
 
     # should be moved into table class
     meta.domain = "{0.scheme}://{0.netloc}/".format(urlsplit(meta.url))
-    return render_template('show_table.jinja2', meta=meta, table=table)
+    next = prev = pageId
 
+    if entries.has_prev:
+        prev = entries.prev_num
+    if entries.has_next:
+        next = entries.next_num
+    return render_template('show_table.jinja2', meta=meta, table=table,
+                            prev=prev, next=next)
 
 @app.route('/changeClass/<int:tableId>/<string:newTableType>')
 def changeClass(tableId, newTableType):

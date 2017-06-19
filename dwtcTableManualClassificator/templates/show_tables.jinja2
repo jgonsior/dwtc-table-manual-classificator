@@ -13,7 +13,8 @@
 <ul class=tables>
     {% for entry in entries.items %}
     <li>
-        <h2><a href="{{ url_for('showTable', tableId=entry.id) }}">{{ entry.id }}</a> | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
+        <!-- @todo: bug: loop.index not working pagination right now -->
+        <h2><a href="{{ url_for('showTable', pageId=loop.index) }}">{{ entry.id }}</a> | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
         <p>{{ entry.originalTableType }}</p>
         {% else %}
         <li><em>Unbelievable.  No tables here so far</em> {% endfor %}
