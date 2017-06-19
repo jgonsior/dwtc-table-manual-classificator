@@ -55,7 +55,7 @@ public class CreateArff {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL LIMIT 100");
 			
 			while (resultSet.next()) {
 				
@@ -92,17 +92,19 @@ public class CreateArff {
 				//calculate all the features and transform them into a weka readable format :)
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
 				
+				instance.setValue(0, resultSet.getInt("id"));
+				
 				//@TODO: should be changed to an enum!
 				
 				//set new class
 				int classAttribute = -1;
 				
 				switch(resultSet.getString("newTableType")) {
+					case "RELATION_V":
 					case "ENTITY":
 						classAttribute = 2;
 						break;
 					case "RELATION":
-					case "RELATION_V":
 						classAttribute = 1;
 						break;
 					case "MATRIX":
