@@ -55,7 +55,7 @@ public class CreateArff {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL LIMIT 100");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
 			
 			while (resultSet.next()) {
 				

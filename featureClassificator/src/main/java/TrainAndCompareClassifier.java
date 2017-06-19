@@ -3,6 +3,8 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 import java.sql.SQLException;
 import java.util.Random;
@@ -16,12 +18,19 @@ public class TrainAndCompareClassifier {
 		try {
 			
 			DataSource source = new DataSource("data.arff");
-			Instances dataSet = source.getDataSet();
-			dataSet.setClassIndex(dataSet.numAttributes()-1);
+			Instances unfilteredDataSet = source.getDataSet();
+			unfilteredDataSet.setClassIndex(unfilteredDataSet.numAttributes()-1);
 			
 			// train new classifier
 			RandomForest randomForest = new RandomForest();
 			//randomForest.buildClassifier(dataSet);
+			
+			// filter out id
+			Remove remove = new Remove();
+			remove.setAttributeIndices("1");
+			remove.setInputFormat(unfilteredDataSet);
+			
+			Instances dataSet = Filter.useFilter(unfilteredDataSet, remove);
 			
 			// evaluate
 			Evaluation newEvaluation = new Evaluation(dataSet);
