@@ -8,7 +8,8 @@ function toggleClasses(className) {
 }
 $(document).ready(function() {
   var originalClass = $('h2').attr('type');
-  var id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+  var id = $("#id").text()
+  console.log("id: "+id)
   $('#classificationButtons button').filter(function() {
     return $(this).text() === $('h2').attr('type');
   }).addClass('btn-primary');

@@ -34,6 +34,7 @@ class Table(db.Model):
     cells = db.Column(db.Text)
     newTableType = db.Column(db.Text)
     label = db.Column(db.Text)
+    tempTableType = db.Column(db.Text)
 
     def __init__(self, pageTitle, url, title, originalTableType, cells):
         self.pageTitle = pageTitle
@@ -155,7 +156,7 @@ def showTable(pageId):
 @app.route('/changeClass/<int:tableId>/<string:newTableType>')
 def changeClass(tableId, newTableType):
     table = Table.query.get(tableId)
-    table.newTableType = newTableType
+    table.tempTableType = newTableType
     db.session.commit()
     return ujson.dumps({'success': True}), 200, \
         {'ContentType': 'application/json'}
