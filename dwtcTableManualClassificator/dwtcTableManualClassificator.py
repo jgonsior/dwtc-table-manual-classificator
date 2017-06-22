@@ -35,6 +35,10 @@ class Table(db.Model):
     newTableType = db.Column(db.Text)
     label = db.Column(db.Text)
     tempTableType = db.Column(db.Text)
+    recordEndOffset = db.Column(db.Text)
+    recordOffset = db.Column(db.Text)
+    s3Link = db.Column(db.Text)
+    tableNum = db.Column(db.Text)
 
     def __init__(self, pageTitle, url, title, originalTableType, cells):
         self.pageTitle = pageTitle
@@ -127,18 +131,37 @@ def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
     print('Added  ' + str(i) + ' more tables of type ' + tabletype)
 
 
+@app.cli.command('getS3Links')
+@click.argument('sourcedirectory', nargs=1)
+def generateMoreTrainingDataCommand(sourcedirectory):
+    """Initializes the database."""
+    db.create_all()
+
+    # load all entries out of the database
+    tables = Table.query.all()
+
+    # first unzip file
+    for filename in glob.glob(os.path.join(sourcedirectory, '*.json.gz')):
+        print("Start searching in " + filename)
+        with gzip.open(filename, "rb") as file:
+            for line in file:
+                rawData = ujson.loads(line)
+                pprint(rawData)
+
+            #db.session.commit()
+
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
     #entries = db.session.query(Table).paginate(page, 100)
-    entries = db.session.query(Table).filter(Table.newTableType != Table.label).paginate(page, 100)
+    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V"A).paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:pageId>')
 def showTable(pageId):
     #entries = db.session.query(Table).paginate(pageId, 1)
-    entries = db.session.query(Table).filter(Table.newTableType != Table.label).paginate(pageId, 1)
+    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
     meta = entries.items[0]
     table = ujson.loads(meta.cells)
 

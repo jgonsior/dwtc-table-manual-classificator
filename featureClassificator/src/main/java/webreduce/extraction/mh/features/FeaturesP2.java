@@ -26,7 +26,7 @@ public class FeaturesP2 {
 	private ArrayList<AbstractTableListener> localListeners;
 	private ArrayList<Attribute> attributeList;
 	
-	private FastVector attributeVector; // vector of all atrributes PLUS class attribute
+	private FastVector attributeVector; // vector of all attributes PLUS class attribute
 	private FastVector classAttrVector; // vector of strings of all possible class values
 	private Attribute classAttr;
 	
@@ -134,7 +134,7 @@ public class FeaturesP2 {
 		// LOCAL FEATURES
 		
 		// PER-ROW
-		// get the 2 first and last rows
+		// get the 2 first and last rowS or last row?
 		int[] localRowIndexes = {0, 1, tStats.getTableHeight() - 1};
 		
 		for (int i = 0; i < localRowIndexes.length; i++) {
@@ -227,7 +227,9 @@ public class FeaturesP2 {
 	}
 	
 	
-	// Features are implemented according to an Observer Pattern
+	/**
+	 * Features are implemented according to an Observer Pattern
+	 */
 	public abstract class AbstractTableListener {
 		
 		protected String featureName = "ABSTRACT_TABLE_LISTENER";
@@ -236,7 +238,11 @@ public class FeaturesP2 {
 			initialize(stats);
 		}
 		
-		// should be called once the table is ready for iteration
+		/**
+		 * should be called once the table is ready for iteration
+		 *
+		 * @param stats
+		 */
 		protected abstract void initialize(TableStats stats);
 		
 		
@@ -244,7 +250,9 @@ public class FeaturesP2 {
 			onCell(content, stats);
 		}
 		
-		// should be called each time a cell is inspected by the subject
+		/**
+		 * should be called each time a cell is inspected by the subject
+		 */
 		protected abstract void onCell(Element content, TableStats stats);
 		
 		public void end() {
@@ -255,10 +263,14 @@ public class FeaturesP2 {
 			return featureName;
 		}
 		
-		// should be called once the table iteration has finished
+		/**
+		 * should be called once the table iteration has finished
+		 */
 		protected abstract void finalize();
 		
-		// pairs of feature names and feature values are given as result
+		/**
+		 * pairs of feature names and feature values are given as result
+		 */
 		public abstract HashMap<String, Double> getResults();
 	}
 	
@@ -782,9 +794,11 @@ public class FeaturesP2 {
 	public class LocalContentRatios extends AbstractTableListener {
 		
 		private int cellCount, count_th, count_anchor, count_img, count_input, count_select,
-				count_contains_number, count_is_number, count_colon, count_comma;
+				count_contains_number, count_is_number, count_colon, count_comma, count_contains_whitespace,
+				count_contains_year, count_special_char;
 		private double ratio_th, ratio_anchor, ratio_img, ratio_input, ratio_select,
-				ratio_contains_number, ratio_is_number, ratio_colon, ratio_comma;
+				ratio_contains_number, ratio_is_number, ratio_colon, ratio_comma, ratio_contains_whitespace,
+				ratio_contains_year, ratio_special_char;
 		
 		public LocalContentRatios() {
 			featureName = "GROUP_LOCAL_CONTENT_RATIOS";
@@ -792,7 +806,8 @@ public class FeaturesP2 {
 		
 		public void initialize(TableStats stats) {
 			cellCount = count_th = count_anchor = count_img = count_input = count_select =
-					count_contains_number = count_is_number = count_colon = count_comma = 0;
+					count_contains_number = count_is_number = count_colon = count_comma = count_contains_whitespace =
+							count_contains_year = count_special_char = 0;
 		}
 		
 		public void onCell(Element content, TableStats stats) {
@@ -831,6 +846,10 @@ public class FeaturesP2 {
 			// check if only digit
 			if (CellTools.isNumericOnly(cleanedContent)) {
 				count_is_number++;
+			}
+			
+			if (CellTools.containsWhitespace(content.text())) {
+				count_contains_whitespace++;
 			}
 			cellCount++;
 		}
