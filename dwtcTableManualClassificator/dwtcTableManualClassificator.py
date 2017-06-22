@@ -19,7 +19,7 @@ app.config.from_object(__name__)  # load config from this file
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 db = SQLAlchemy(app)
 
 app.config.from_envvar('TABLE_BROWSER_SETTINGS', silent=True)
@@ -133,12 +133,23 @@ def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
 
 @app.cli.command('getS3Links')
 @click.argument('sourcedirectory', nargs=1)
-def generateMoreTrainingDataCommand(sourcedirectory):
+def getS3Links(sourcedirectory):
     """Initializes the database."""
     db.create_all()
 
     # load all entries out of the database
-    tables = Table.query.all()
+    tablesList = Table.query.all()
+
+    tablesFinished = list()
+
+    tables = {}
+    tables['MATRIX'] = set()
+    tables['RELATION'] = set()
+    tables['ENTITY'] = set()
+    tables['OTHER'] = set()
+
+    for table in tablesList:
+        tables[table.originalTableType].add(table)
 
     # first unzip file
     for filename in glob.glob(os.path.join(sourcedirectory, '*.json.gz')):
@@ -146,15 +157,33 @@ def generateMoreTrainingDataCommand(sourcedirectory):
         with gzip.open(filename, "rb") as file:
             for line in file:
                 rawData = ujson.loads(line)
-                pprint(rawData)
-
-            #db.session.commit()
+                count = 0
+                for table in tables[rawData['tableType']]:
+                    if table.url == rawData['url']:
+                        if table.cells == ujson.dumps(rawData['relation']):
+                            count += 1
+                            if(count > 1):
+                                print("#"*100)
+                                print("duplicate found!!!")
+                                pprint(rawData)
+                            table.recordEndOffset = rawData['recordEndOffset']
+                            table.recordOffset = rawData['recordOffset']
+                            table.s3Link = rawData['s3Link']
+                            table.tableNum = rawData['tableNum']
+                            tablesFinished.append(table)
+                            db.session.add(table)
+        pprint(tablesFinished)
+        db.session.commit()
+        db.session.commit()
+        db.session.commit()
+        db.session.commit()
+        db.session.commit()
 
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
-    #entries = db.session.query(Table).paginate(page, 100)
-    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V"A).paginate(page, 100)
+    # entries = db.session.query(Table).paginate(page, 100)
+    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
