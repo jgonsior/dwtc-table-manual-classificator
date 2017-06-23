@@ -174,10 +174,6 @@ def getS3Links(sourcedirectory):
                             db.session.add(table)
         pprint(tablesFinished)
         db.session.commit()
-        db.session.commit()
-        db.session.commit()
-        db.session.commit()
-        db.session.commit()
 
 @app.route('/')
 @app.route('/<int:page>')

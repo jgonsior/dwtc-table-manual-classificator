@@ -3,7 +3,6 @@ import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import webreduce.extraction.mh.TableClassification;
 import webreduce.extraction.mh.features.FeaturesP2;
 import webreduce.extraction.mh.tools.TableConvert;
 import weka.core.Instance;
@@ -85,13 +84,13 @@ public class CreateArff {
 					return;
 				}
 				
-				TableClassification tableClassification = new TableClassification("SimpleCart_P1.mdl",
-						"RandomForest_P2.mdl");
-				//System.out.println("Predicted class: " + tableClassification.classifyTable(convertedTable.get()).getTableType() + "|" + resultSet.getString("newTableType"));
-				
 				//calculate all the features and transform them into a weka readable format :)
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
 				
+				/*for(int i=0;i<instance.numAttributes();i++) {
+					System.out.println(instance.attribute(i).name() + ": " + instance.value(i));
+				}
+				System.out.println("#################################");*/
 				instance.setValue(0, resultSet.getInt("id"));
 				
 				//@TODO: should be changed to an enum!

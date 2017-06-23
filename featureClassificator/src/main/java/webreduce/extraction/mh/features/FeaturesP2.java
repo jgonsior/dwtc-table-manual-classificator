@@ -15,12 +15,113 @@ import weka.core.FastVector;
 import weka.core.Instance;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class FeaturesP2 {
 	
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
-	private static String featureWhiteList = "ID, LOCAL_RATIO_IS_NUMBER_COL_0, AVG_CELL_LENGTH, LOCAL_RATIO_IS_NUMBER_COL_2, LOCAL_RATIO_COLON_ROW_1, LOCAL_RATIO_ANCHOR_ROW_2, LOCAL_LENGTH_VARIANCE_COL_2, LOCAL_AVG_LENGTH_ROW_0, LOCAL_AVG_LENGTH_ROW_2, LOCAL_RATIO_HEADER_ROW_0, CUMULATIVE_CONTENT_CONSISTENCY, STD_DEV_ROWS, RATIO_ALPHABETICAL, LOCAL_RATIO_COMMA_COL_0, LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, STD_DEV_COLS, LOCAL_RATIO_COLON_COL_0, MAX_COLS, LOCAL_RATIO_CONTAINS_NUMBER_COL_2, LOCAL_RATIO_HEADER_COL_1, LOCAL_RATIO_HEADER_COL_2, LOCAL_RATIO_CONTAINS_NUMBER_COL_0, AVG_COLS";
+	private static String featureWhiteList =
+			"AVG_CELL_LENGTH, " +
+					"CUMULATIVE_CONTENT_CONSISTENCY, " +
+					"ID, " +
+					"LOCAL_AVG_LENGTH_ROW_0, " +
+					"LOCAL_AVG_LENGTH_ROW_1, " +
+					"LOCAL_AVG_LENGTH_ROW_2, " +
+					"LOCAL_AVG_LENGTH_COL_0, " +
+					"LOCAL_AVG_LENGTH_COL_1, " +
+					"LOCAL_AVG_LENGTH_COL_2, " +
+					"LOCAL_LENGTH_VARIANCE_ROW_0, " +
+					"LOCAL_LENGTH_VARIANCE_ROW_1, " +
+					"LOCAL_LENGTH_VARIANCE_ROW_2, " +
+					"LOCAL_LENGTH_VARIANCE_COL_0, " +
+					"LOCAL_LENGTH_VARIANCE_COL_1, " +
+					"LOCAL_LENGTH_VARIANCE_COL_2, " +
+					"LOCAL_RATIO_ANCHOR_ROW_0, " +
+					"LOCAL_RATIO_ANCHOR_ROW_1, " +
+					"LOCAL_RATIO_ANCHOR_ROW_2, " +
+					"LOCAL_RATIO_ANCHOR_COL_0, " +
+					"LOCAL_RATIO_ANCHOR_COL_1, " +
+					"LOCAL_RATIO_ANCHOR_COL_2, " +
+					"LOCAL_RATIO_IMAGE_ROW_0, " +
+					"LOCAL_RATIO_IMAGE_ROW_1, " +
+					"LOCAL_RATIO_IMAGE_ROW_2, " +
+					"LOCAL_RATIO_IMAGE_COL_0, " +
+					"LOCAL_RATIO_IMAGE_COL_1, " +
+					"LOCAL_RATIO_IMAGE_COL_2, " +
+					"LOCAL_RATIO_INPUT_ROW_0, " +
+					"LOCAL_RATIO_INPUT_ROW_1, " +
+					"LOCAL_RATIO_INPUT_ROW_2, " +
+					"LOCAL_RATIO_INPUT_COL_0, " +
+					"LOCAL_RATIO_INPUT_COL_1, " +
+					"LOCAL_RATIO_INPUT_COL_2, " +
+					"LOCAL_RATIO_SELECT_ROW_0, " +
+					"LOCAL_RATIO_SELECT_ROW_1, " +
+					"LOCAL_RATIO_SELECT_ROW_2, " +
+					"LOCAL_RATIO_SELECT_COL_0, " +
+					"LOCAL_RATIO_SELECT_COL_1, " +
+					"LOCAL_RATIO_SELECT_COL_2, " +
+					"LOCAL_RATIO_COLON_COL_0, " +
+					"LOCAL_RATIO_COLON_COL_1, " +
+					"LOCAL_RATIO_COLON_COL_2, " +
+					"LOCAL_RATIO_COLON_ROW_0, " +
+					"LOCAL_RATIO_COLON_ROW_1, " +
+					"LOCAL_RATIO_COLON_ROW_2, " +
+					"LOCAL_RATIO_COMMA_COL_0, " +
+					"LOCAL_RATIO_COMMA_COL_1, " +
+					"LOCAL_RATIO_COMMA_COL_2, " +
+					"LOCAL_RATIO_COMMA_ROW_0, " +
+					"LOCAL_RATIO_COMMA_ROW_1, " +
+					"LOCAL_RATIO_COMMA_ROW_2, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_COL_0, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_COL_1, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_COL_2, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, " +
+					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_2, " +
+					"LOCAL_RATIO_HEADER_COL_0, " +
+					"LOCAL_RATIO_HEADER_COL_1, " +
+					"LOCAL_RATIO_HEADER_COL_2, " +
+					"LOCAL_RATIO_HEADER_ROW_0, " +
+					"LOCAL_RATIO_HEADER_ROW_1, " +
+					"LOCAL_RATIO_HEADER_ROW_2, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_0, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_1, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_2, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_0, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_1, " +
+					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_2, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_ROW_0, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_ROW_1, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_ROW_2, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_COL_0, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_COL_1, " +
+					"LOCAL_RATIO_SPECIAL_CHAR_COL_2, " +
+					"LOCAL_RATIO_PERCENTAGE_ROW_0, " +
+					"LOCAL_RATIO_PERCENTAGE_ROW_1, " +
+					"LOCAL_RATIO_PERCENTAGE_ROW_2, " +
+					"LOCAL_RATIO_PERCENTAGE_COL_0, " +
+					"LOCAL_RATIO_PERCENTAGE_COL_1, " +
+					"LOCAL_RATIO_PERCENTAGE_COL_2, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_ROW_0, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_ROW_1, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_ROW_2, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_COL_0, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_COL_1, " +
+					"LOCAL_RATIO_CONTAINS_YEAR_COL_2, " +
+					"LOCAL_RATIO_IS_NUMBER_COL_0, " +
+					"LOCAL_RATIO_IS_NUMBER_COL_1, " +
+					"LOCAL_RATIO_IS_NUMBER_COL_2, " +
+					"LOCAL_RATIO_IS_NUMBER_ROW_0, " +
+					"LOCAL_RATIO_IS_NUMBER_ROW_1, " +
+					"LOCAL_RATIO_IS_NUMBER_ROW_2, " +
+					"MAX_COLS, " +
+					"RATIO_ALPHABETICAL, " +
+					"STD_DEV_COLS, " +
+					"STD_DEV_ROWS, ";
+	
+	
+	//"ID, LOCAL_RATIO_IS_NUMBER_COL_0, AVG_CELL_LENGTH, LOCAL_RATIO_IS_NUMBER_COL_2, LOCAL_RATIO_COLON_ROW_1, LOCAL_RATIO_ANCHOR_ROW_2, LOCAL_LENGTH_VARIANCE_COL_2, LOCAL_AVG_LENGTH_ROW_0, LOCAL_AVG_LENGTH_ROW_2, LOCAL_RATIO_HEADER_ROW_0, CUMULATIVE_CONTENT_CONSISTENCY, STD_DEV_ROWS, RATIO_ALPHABETICAL, LOCAL_RATIO_COMMA_COL_0, LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, STD_DEV_COLS, LOCAL_RATIO_COLON_COL_0, MAX_COLS, LOCAL_RATIO_CONTAINS_NUMBER_COL_2, LOCAL_RATIO_HEADER_COL_1, LOCAL_RATIO_HEADER_COL_2, LOCAL_RATIO_CONTAINS_NUMBER_COL_0, AVG_COLS";
 	
 	private ArrayList<AbstractTableListener> globalListeners;
 	private ArrayList<AbstractTableListener> localListeners;
@@ -795,10 +896,10 @@ public class FeaturesP2 {
 		
 		private int cellCount, count_th, count_anchor, count_img, count_input, count_select,
 				count_contains_number, count_is_number, count_colon, count_comma, count_contains_whitespace,
-				count_contains_year, count_special_char;
+				count_contains_year, count_percentage, count_special_char;
 		private double ratio_th, ratio_anchor, ratio_img, ratio_input, ratio_select,
 				ratio_contains_number, ratio_is_number, ratio_colon, ratio_comma, ratio_contains_whitespace,
-				ratio_contains_year, ratio_special_char;
+				ratio_contains_year, ratio_percentage, ratio_special_char;
 		
 		public LocalContentRatios() {
 			featureName = "GROUP_LOCAL_CONTENT_RATIOS";
@@ -807,7 +908,7 @@ public class FeaturesP2 {
 		public void initialize(TableStats stats) {
 			cellCount = count_th = count_anchor = count_img = count_input = count_select =
 					count_contains_number = count_is_number = count_colon = count_comma = count_contains_whitespace =
-							count_contains_year = count_special_char = 0;
+							count_contains_year = count_percentage = count_special_char = 0;
 		}
 		
 		public void onCell(Element content, TableStats stats) {
@@ -851,6 +952,19 @@ public class FeaturesP2 {
 			if (CellTools.containsWhitespace(content.text())) {
 				count_contains_whitespace++;
 			}
+			
+			if (CellTools.detectYear(cleanedContent)) {
+				count_contains_year++;
+			}
+			
+			if (cleanedContent.contains("%")) {
+				count_percentage++;
+			}
+			
+			if (Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE).matcher(cleanedContent).find()) {
+				count_special_char++;
+			}
+			
 			cellCount++;
 		}
 		
@@ -865,6 +979,10 @@ public class FeaturesP2 {
 					(cellCount > 0) ? ((double) count_contains_number / (double) cellCount) : 0.0;
 			ratio_is_number = (cellCount > 0) ? ((double) count_is_number / (double) cellCount) : 0.0;
 			ratio_comma = (cellCount > 0) ? ((double) count_comma / (double) cellCount) : 0.0;
+			ratio_contains_whitespace = (cellCount > 0) ? ((double) count_contains_whitespace / (double) cellCount) : 0.0;
+			ratio_contains_year = (cellCount > 0) ? ((double) count_contains_year / (double) cellCount) : 0.0;
+			ratio_percentage = (cellCount > 0) ? ((double) count_percentage / (double) cellCount) : 0.0;
+			ratio_special_char = (cellCount > 0) ? ((double) count_special_char / (double) cellCount) : 0.0;
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -878,6 +996,11 @@ public class FeaturesP2 {
 			result.put("LOCAL_RATIO_CONTAINS_NUMBER", new Double(ratio_contains_number));
 			result.put("LOCAL_RATIO_IS_NUMBER", new Double(ratio_is_number));
 			result.put("LOCAL_RATIO_COMMA", new Double(ratio_comma));
+			result.put("LOCAL_RATIO_CONTAINS_YEAR", new Double(ratio_contains_year));
+			result.put("LOCAL_RATIO_PERCENTAGE", new Double(ratio_percentage));
+			result.put("LOCAL_RATIO_SPECIAL_CHAR", new Double(ratio_special_char));
+			result.put("LOCAL_RATIO_CONTAINS_WHITESPACE", new Double(ratio_contains_whitespace));
+			
 			return result;
 		}
 	}

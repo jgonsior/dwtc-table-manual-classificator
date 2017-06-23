@@ -6,6 +6,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CellTools {
 	
 	
@@ -87,5 +90,24 @@ public class CellTools {
 		cell = StringEscapeUtils.unescapeHtml4(cell);
 		cell = CharMatcher.WHITESPACE.trimAndCollapseFrom(cell, ' ');
 		return cell;
+	}
+	
+	public static Boolean containsWhitespace(String cellContent) {
+		return Pattern.compile("\\s").matcher(cellContent).find();
+	}
+	
+	/**
+	 * Returns true if there is at least one four digits integer (exactly 4 digits!) which is in the range of 1000 to 2100
+	 * @param cellContent
+	 * @return
+	 */
+	public static boolean detectYear(String cellContent) {
+		Matcher matcher = Pattern.compile("(?:^|\\D)(\\d{4})(?=\\D|$)").matcher(cellContent);
+		while (matcher.find()) {
+			if (Integer.parseInt(matcher.group(1)) > 1000 && Integer.parseInt(matcher.group(1)) < 2100) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
