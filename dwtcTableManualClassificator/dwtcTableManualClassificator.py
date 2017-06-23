@@ -163,7 +163,7 @@ def getS3Links(sourcedirectory):
                         if table.cells == ujson.dumps(rawData['relation']):
                             count += 1
                             if(count > 1):
-                                print("#"*100)
+                                print("#" * 100)
                                 print("duplicate found!!!")
                                 pprint(rawData)
                             table.recordEndOffset = rawData['recordEndOffset']
@@ -175,18 +175,37 @@ def getS3Links(sourcedirectory):
         pprint(tablesFinished)
         db.session.commit()
 
+
+@app.cli.command('getOriginalHtmlFromS3')
+@click.argument('sourcedirectory', nargs=1)
+def getOriginalHtmlFromS3(sourcedirectory):
+    """Initializes the database."""
+
+    """ should automatically download one s3 file at a time, get the needed data, then download the next one, etc.
+    --> should be runnable at an external server (uberspace?)
+    """
+    db.create_all()
+
+    # load all entries out of the database
+    tables = Table.query.all()
+
+    for table in tables:
+        table.s3Link
+
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
     # entries = db.session.query(Table).paginate(page, 100)
-    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
+    entries = db.session.query(Table).filter(
+        Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:pageId>')
 def showTable(pageId):
     #entries = db.session.query(Table).paginate(pageId, 1)
-    entries = db.session.query(Table).filter(Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
+    entries = db.session.query(Table).filter(
+        Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
     meta = entries.items[0]
     table = ujson.loads(meta.cells)
 
@@ -199,7 +218,8 @@ def showTable(pageId):
     if entries.has_next:
         next = entries.next_num
     return render_template('show_table.jinja2', meta=meta, table=table,
-                            prev=prev, next=next)
+                           prev=prev, next=next)
+
 
 @app.route('/changeClass/<int:tableId>/<string:newTableType>')
 def changeClass(tableId, newTableType):
