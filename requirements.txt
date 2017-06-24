@@ -1,23 +1,33 @@
 appdirs==1.4.3
+boto==2.47.0
 click==6.7
 dominate==2.3.1
+-e git+git@github.com:jgonsior/dwtc-table-browser.git@a7310de845cf4f4bce4409ce4abfdf1622b4714a#egg=dwtcTableManualClassificator
+filechunkio==1.8
 Flask==0.12.1
 Flask-Bootstrap==3.3.7.1
 Flask-SQLAlchemy==2.2
+google-api-python-client==1.6.2
 greenlet==0.4.12
+-e git+https://github.com/commoncrawl/gzipstream.git@08f4249658b4d6e1a09be01964ee49d29784a2de#egg=gzipstream
+httplib2==0.10.3
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
+mrjob==0.5.10
 msgpack-python==0.4.8
 neovim==0.1.13
+oauth2client==4.1.1
 packaging==16.8
+pyasn1==0.2.3
+pyasn1-modules==0.0.9
 pyparsing==2.2.0
+PyYAML==3.12
+rsa==3.4.2
 six==1.10.0
 SQLAlchemy==1.1.9
 ujson==1.35
+uritemplate==3.0.0
 visitor==0.1.3
+warc==0.2.1
 Werkzeug==0.12.1
-boto
-mrjob
-warc
-https://github.com/commoncrawl/gzipstream/archive/master.zip
