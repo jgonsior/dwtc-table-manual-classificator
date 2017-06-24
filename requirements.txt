@@ -2,7 +2,6 @@ appdirs==1.4.3
 boto==2.47.0
 click==6.7
 dominate==2.3.1
--e git+git@github.com:jgonsior/dwtc-table-browser.git@a7310de845cf4f4bce4409ce4abfdf1622b4714a#egg=dwtcTableManualClassificator
 filechunkio==1.8
 Flask==0.12.1
 Flask-Bootstrap==3.3.7.1

@@ -14,8 +14,9 @@ from random import random
 from urllib.parse import urlsplit
 import boto
 from boto.s3.key import Key
-from gzipstream import GzipStreamFile
-import warc
+import requests
+import gzip
+from io import BytesIO, StringIO
 
 app = Flask(__name__)  # create the application instance :)
 Bootstrap(app)
@@ -181,37 +182,40 @@ def getS3Links(sourcedirectory):
 
 
 @app.cli.command('getOriginalHtmlFromS3')
-@click.argument('sourcedirectory', nargs=1)
-def getOriginalHtmlFromS3(sourcedirectory):
+def getOriginalHtmlFromS3():
     """Initializes the database."""
 
-    """ should automatically download one s3 file at a time, get the needed data, then download the next one, etc.
-    --> should be runnable at an external server (uberspace?)
-    """
     db.create_all()
-
-    s3connection = boto.connect_s3(anon=True)
-    publicDatasets = s3connection.get_bucket('aws-publicdatasets')
 
     # load all entries out of the database
     tables = Table.query.all()
 
-    key = Key(publicDatasets)
+    #for key in publicDatasets.list():
+    #    print(key.name.encode('utf-8'))
 
     for table in tables:
-        # common-crawl/crawl-data/CC-MAIN-2014-23/segments/1405997894799.55/warc/CC-MAIN-20140722025814-00066-ip-10-33-131-23.ec2.internal.warc.gz
-        key.key = table.s3Link
+        print("Downloading https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:])
+        response = requests.get("https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:], headers={'Range': 'bytes={}-{}'.format(table.recordOffset, table.recordEndOffset)})
 
-        file = warc.WARCFile(fileobj=GzipStreamFile(key))
+        raw_data = BytesIO(response.content)
+        #stringio = StringIO(raw_data.read().decode('latin-1'))
+        with gzip.GzipFile(fileobj=raw_data) as f:
+            print("whut")
+            pprint(f.read())
 
-        for num, record in enumerate(f):
-            if record['WARC-Type'] == 'response':
-                # Imagine we're interested in the URL, the length of content, and any Content-Type strings in there
-                print record['WARC-Target-URI'], record['Content-Length']
-                print '\n'.join(x for x in record.payload.read().replace('\r', '').split('\n\n')[0].split('\n') if 'content-type:' in x.lower())
-                print '=-=-' * 10
-            if num > 100:
-                break
+        print("Done…")
+
+        '''with gzip.open("warc.gz", "r") as file:
+            for line in file:
+                print(line)'''
+        return
+
+
+        #common-crawl/crawl-data/CC-MAIN-2014-23/segments/1405997894799.55/warc/CC-MAIN-20140722025814-00066-ip-10-33-131-23.ec2.internal.warc.gz
+        #key = Key(publicDatasets, "crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00023-ip-10-180-212-248.ec2.internal.warc.gz")
+        #"s3://commoncrawl/crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00001-ip-10-180-212-248.ec2.internal.warc.gz" #+ table.s3Link
+        #print(key)
+        #print(key.read(100))
 
 @app.route('/')
 @app.route('/<int:page>')
