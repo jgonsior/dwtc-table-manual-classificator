@@ -2,10 +2,12 @@ package webreduce.extraction.mh.tools;
 
 import com.google.common.base.CharMatcher;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,5 +111,45 @@ public class CellTools {
 			}
 		}
 		return false;
+	}
+	
+	public static double caluclateAverageCellLengthRowStd(JSONArray jsonArrayTable) {
+		int[] averageStds = new int[jsonArrayTable.length()];
+		for (int i = 0; i < jsonArrayTable.length(); i++) {
+			JSONArray row = jsonArrayTable.getJSONArray(i);
+			for (int j = 0; j < row.length(); j++) {
+				averageStds[i] += row.getString(j).length();
+			}
+		}
+		double mean = Arrays.stream(averageStds).average().getAsDouble();
+		int squareSum=0;
+		for(int i=0; i<averageStds.length;i++) {
+			squareSum += Math.pow(averageStds[i] - mean, 2) / averageStds.length;
+		}
+		return Math.sqrt(squareSum/(averageStds.length-1));
+	}
+	
+	public static double caluclateAverageCellLengthColumnStd(JSONArray jsonArrayTable) {
+		
+		int[] averageStds = new int[jsonArrayTable.getJSONArray(0).length()];
+		for (int i = 0; i < jsonArrayTable.length(); i++) {
+			JSONArray row = jsonArrayTable.getJSONArray(i);
+			for (int j = 0; j < row.length(); j++) {
+				averageStds[j] += row.getString(j).length();
+			}
+		}
+		
+		double mean = Arrays.stream(averageStds).average().getAsDouble();
+		int squareSum=0;
+		for(int i=0; i<averageStds.length;i++) {
+			squareSum += Math.pow(averageStds[i] - mean, 2) / averageStds.length;
+		}
+		return Math.sqrt(squareSum/(averageStds.length-1));
+	}
+	
+	public static JSONArray transposeTable(JSONArray jsonArrayTable) {
+		JSONArray result = new JSONArray();
+		result.
+		return result;
 	}
 }

@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import webreduce.extraction.mh.features.FeaturesP2;
+import webreduce.extraction.mh.tools.CellTools;
 import webreduce.extraction.mh.tools.TableConvert;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -54,12 +55,24 @@ public class CreateArff {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL LIMIT 100");
 			
 			while (resultSet.next()) {
 				
 				//parse database json contents
 				JSONArray jsonArrayTable = new JSONArray(resultSet.getString("cells"));
+				
+				//transform table
+				double averageCellLengthRowStd = CellTools.caluclateAverageCellLengthRowStd(jsonArrayTable);
+				double averageCellLengthColumnStd = CellTools.caluclateAverageCellLengthColumnStd(jsonArrayTable);
+				
+				if(averageCellLengthColumnStd < averageCellLengthRowStd) {
+					//horizontal
+					jsonArrayTable = CellTools.transposeTable(jsonArrayTable);
+				} else {
+					//vertical table, do nothing
+				}
+				
 				
 				//convert json to html code
 				String htmlTable = "<table>";
@@ -73,7 +86,7 @@ public class CreateArff {
 					htmlTable += "</tr>";
 				}
 				htmlTable += "</table>";
-				
+				System.out.println(htmlTable);
 				//let jsoup parse the html code again
 				Document document = Jsoup.parse(htmlTable);
 				
