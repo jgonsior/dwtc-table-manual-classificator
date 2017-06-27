@@ -7,7 +7,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,8 +150,19 @@ public class CellTools {
 	}
 	
 	public static JSONArray transposeTable(JSONArray jsonArrayTable) {
-		JSONArray result = new JSONArray();
-		result.
-		return result;
+		List<List<String>> result = new ArrayList<>();
+		
+		for (int i = 0; i < jsonArrayTable.getJSONArray(0).length(); i++) {
+			result.add(new ArrayList<>());
+		}
+		
+		for (int i = 0; i < jsonArrayTable.length(); i++) {
+			JSONArray row = jsonArrayTable.getJSONArray(i);
+			for (int j = 0; j < row.length(); j++) {
+				result.get(j).add(row.getString(j));
+			}
+		}
+		
+		return new JSONArray(result);
 	}
 }
