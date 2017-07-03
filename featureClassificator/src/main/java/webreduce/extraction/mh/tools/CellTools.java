@@ -3,6 +3,7 @@ package webreduce.extraction.mh.tools;
 import com.google.common.base.CharMatcher;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
@@ -115,7 +116,7 @@ public class CellTools {
 		return false;
 	}
 	
-	public static double caluclateAverageCellLengthRowStd(JSONArray jsonArrayTable) {
+	public static double caluclateAverageCellLengthRowStd(JSONArray jsonArrayTable) throws JSONException {
 		int[] averageStds = new int[jsonArrayTable.length()];
 		for (int i = 0; i < jsonArrayTable.length(); i++) {
 			JSONArray row = jsonArrayTable.getJSONArray(i);
@@ -131,7 +132,7 @@ public class CellTools {
 		return Math.sqrt(squareSum/(averageStds.length-1));
 	}
 	
-	public static double caluclateAverageCellLengthColumnStd(JSONArray jsonArrayTable) {
+	public static double caluclateAverageCellLengthColumnStd(JSONArray jsonArrayTable) throws JSONException {
 		
 		int[] averageStds = new int[jsonArrayTable.getJSONArray(0).length()];
 		for (int i = 0; i < jsonArrayTable.length(); i++) {
@@ -149,7 +150,7 @@ public class CellTools {
 		return Math.sqrt(squareSum/(averageStds.length-1));
 	}
 	
-	public static JSONArray transposeTable(JSONArray jsonArrayTable) {
+	public static JSONArray transposeTable(JSONArray jsonArrayTable) throws JSONException {
 		List<List<String>> result = new ArrayList<>();
 		
 		for (int i = 0; i < jsonArrayTable.getJSONArray(0).length(); i++) {
