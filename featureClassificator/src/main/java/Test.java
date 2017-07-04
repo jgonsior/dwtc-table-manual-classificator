@@ -7,28 +7,41 @@ import org.jwat.warc.WarcReader;
 import org.jwat.warc.WarcReaderFactory;
 import org.jwat.warc.WarcRecord;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.*;
 
 /**
  * @author: Julius Gonsior
  */
 public class Test {
 	
-	public static void main(String[] args) {
-		String warcFile = "/tmp/CC-MAIN-20140707234032-00010-ip-10-180-212-248.ec2.internal.warc.gz";
-		long offset = 375128872;
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
+		Class.forName("org.sqlite.JDBC");
+		Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
 		
-		try {
-			InputStream inputstream = new FileInputStream(warcFile);
-			WarcReader warcReader = WarcReaderFactory.getReader(inputstream);
+		Statement getAllTablesStatement = connection.createStatement();
+		
+		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET label = ? WHERE id=?");
+		
+		
+		ResultSet resultSet = getAllTablesStatement.executeQuery("SELECT * FROM `table`");
+		while (resultSet.next()) {
+			String url = "https://commoncrawl.s3.amazonaws.com/" + resultSet.getString("s3Link").replaceFirst("^common-crawl/", "");
+			System.out.println("Start processing " + url);
 			
-			//WarcRecord warcRecord = WarcReaderFactory.getReaderCompressed().getNextRecordFrom(inputstream, offset);
+			InputStream inputstream = new URL(url).openStream();
+
+			WarcReader warcReader = WarcReaderFactory.getReader(inputstream);
 			WarcRecord warcRecord;
 			
-			
 			while ((warcRecord = warcReader.getNextRecord()) != null) {
-				if (warcRecord.getStartOffset() < offset)
+				if (warcRecord.getStartOffset() < resultSet.getLong("recordOffset")) {
 					continue;
+				}
+				
 				byte[] rawContent = IOUtils.toByteArray(warcRecord
 						.getPayloadContent());
 				
@@ -38,47 +51,28 @@ public class Test {
 				doc = Jsoup.parse(new ByteArrayInputStream(
 						rawContent), null, "");
 				
-				Elements tables = doc.select("table");
-				Element table = tables.get(16);
-				System.out.println(table.html());
 				
-				
-				if (doc.title().equals("Petition For Nick To Fix His \"Tooth\" - MMA Forum")) {
-					//System.out.println(doc.html());
+				if (doc.title().equals(resultSet.getString("pageTitle"))) {
+					Elements tables = doc.select("table");
+					Element table = tables.get(resultSet.getInt("tableNum"));
+					
+					
+					addHtmlStatement.setString(1, table.html());
+					addHtmlStatement.setInt(2, resultSet.getInt("id"));
+					
+					addHtmlStatement.executeUpdate();
+					
 					System.out.println(warcReader.getStartOffset());
 					System.out.println(warcReader.getOffset());
 					
-					long foundOffset = warcReader.getOffset();
-					
 					inputstream.close();
 					
-					
-					InputStream inputstream2 = new FileInputStream(warcFile);
-					
-					WarcRecord warcRecord2 = WarcReaderFactory.getReaderCompressed().getNextRecordFrom(inputstream2, foundOffset);
-					byte[] rawContent2 = IOUtils.toByteArray(warcRecord2
-							.getPayloadContent());
-					
-					Document doc2;
-					
-					// try parsing with charset detected from doc
-					doc2 = Jsoup.parse(new ByteArrayInputStream(
-							rawContent2), null, "");
-					System.out.println(doc2.html());
-					
-					
-					return;
-					
-					
+					break;
+				} else {
+					System.out.println("not yet found");
 				}
 			}
 			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		
-		
 	}
 }
