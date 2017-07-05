@@ -24,7 +24,7 @@ public class Test {
 		
 		Statement getAllTablesStatement = connection.createStatement();
 		
-		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET label = ? WHERE id=?");
+		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET htmlCode = ? WHERE id=?");
 		
 		
 		ResultSet resultSet = getAllTablesStatement.executeQuery("SELECT * FROM `table`");
