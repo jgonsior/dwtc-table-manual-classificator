@@ -27,14 +27,15 @@ public class Test {
 		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET htmlCode = ? WHERE id=?");
 		boolean notEmpty = true;
 		while (notEmpty) {
-			ResultSet resultSet = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode != NULL ");
-			if (resultSet.wasNull()) {
+			ResultSet countTables = connection.createStatement().executeQuery("SELECT COUNT(*) FROM `table` WHERE htmlCode != NULL");
+			ResultSet allTables = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode != NULL ");
+			if (countTables.getLong(0) == 0) {
 				notEmpty = false;
 			}
 			
-			while (resultSet.next()) {
+			while (allTables.next()) {
 				try {
-					String url = "https://commoncrawl.s3.amazonaws.com/" + resultSet.getString("s3Link").replaceFirst("^common-crawl/", "");
+					String url = "https://commoncrawl.s3.amazonaws.com/" + allTables.getString("s3Link").replaceFirst("^common-crawl/", "");
 					System.out.println("Start processing " + url);
 					
 					InputStream inputstream = new URL(url).openStream();
@@ -43,7 +44,7 @@ public class Test {
 					WarcRecord warcRecord;
 					
 					while ((warcRecord = warcReader.getNextRecord()) != null) {
-						if (warcRecord.getStartOffset() < resultSet.getLong("recordOffset")) {
+						if (warcRecord.getStartOffset() < allTables.getLong("recordOffset")) {
 							continue;
 						}
 						
@@ -57,13 +58,13 @@ public class Test {
 								rawContent), null, "");
 						
 						
-						if (doc.title().equals(resultSet.getString("pageTitle"))) {
+						if (doc.title().equals(allTables.getString("pageTitle"))) {
 							Elements tables = doc.select("table");
-							Element table = tables.get(resultSet.getInt("tableNum"));
+							Element table = tables.get(allTables.getInt("tableNum"));
 							
 							
 							addHtmlStatement.setString(1, table.html());
-							addHtmlStatement.setInt(2, resultSet.getInt("id"));
+							addHtmlStatement.setInt(2, allTables.getInt("id"));
 							
 							addHtmlStatement.executeUpdate();
 							
