@@ -25,54 +25,63 @@ public class Test {
 		Statement getAllTablesStatement = connection.createStatement();
 		
 		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET htmlCode = ? WHERE id=?");
-		
-		
-		ResultSet resultSet = getAllTablesStatement.executeQuery("SELECT * FROM `table`");
-		while (resultSet.next()) {
-			String url = "https://commoncrawl.s3.amazonaws.com/" + resultSet.getString("s3Link").replaceFirst("^common-crawl/", "");
-			System.out.println("Start processing " + url);
-			
-			InputStream inputstream = new URL(url).openStream();
-			
-			WarcReader warcReader = WarcReaderFactory.getReader(inputstream);
-			WarcRecord warcRecord;
-			
-			while ((warcRecord = warcReader.getNextRecord()) != null) {
-				if (warcRecord.getStartOffset() < resultSet.getLong("recordOffset")) {
-					continue;
-				}
-				
-				byte[] rawContent = IOUtils.toByteArray(warcRecord
-						.getPayloadContent());
-				
-				Document doc;
-				
-				// try parsing with charset detected from doc
-				doc = Jsoup.parse(new ByteArrayInputStream(
-						rawContent), null, "");
-				
-				
-				if (doc.title().equals(resultSet.getString("pageTitle"))) {
-					Elements tables = doc.select("table");
-					Element table = tables.get(resultSet.getInt("tableNum"));
-					
-					
-					addHtmlStatement.setString(1, table.html());
-					addHtmlStatement.setInt(2, resultSet.getInt("id"));
-					
-					addHtmlStatement.executeUpdate();
-					
-					System.out.println(warcReader.getStartOffset());
-					System.out.println(warcReader.getOffset());
-					
-					inputstream.close();
-					
-					break;
-				} else {
-					System.out.println("not yet found");
-				}
+		boolean notEmpty = true;
+		while (notEmpty) {
+			ResultSet resultSet = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode != NULL ");
+			if (resultSet.wasNull()) {
+				notEmpty = false;
 			}
 			
+			while (resultSet.next()) {
+				try {
+					String url = "https://commoncrawl.s3.amazonaws.com/" + resultSet.getString("s3Link").replaceFirst("^common-crawl/", "");
+					System.out.println("Start processing " + url);
+					
+					InputStream inputstream = new URL(url).openStream();
+					
+					WarcReader warcReader = WarcReaderFactory.getReader(inputstream);
+					WarcRecord warcRecord;
+					
+					while ((warcRecord = warcReader.getNextRecord()) != null) {
+						if (warcRecord.getStartOffset() < resultSet.getLong("recordOffset")) {
+							continue;
+						}
+						
+						byte[] rawContent = IOUtils.toByteArray(warcRecord
+								.getPayloadContent());
+						
+						Document doc;
+						
+						// try parsing with charset detected from doc
+						doc = Jsoup.parse(new ByteArrayInputStream(
+								rawContent), null, "");
+						
+						
+						if (doc.title().equals(resultSet.getString("pageTitle"))) {
+							Elements tables = doc.select("table");
+							Element table = tables.get(resultSet.getInt("tableNum"));
+							
+							
+							addHtmlStatement.setString(1, table.html());
+							addHtmlStatement.setInt(2, resultSet.getInt("id"));
+							
+							addHtmlStatement.executeUpdate();
+							
+							System.out.println(warcReader.getStartOffset());
+							System.out.println(warcReader.getOffset());
+							
+							inputstream.close();
+							
+							break;
+						} else {
+							System.out.println("not yet found");
+						}
+						
+					}
+				} catch (Exception e) {
+					continue;
+				}
+			}
 		}
 	}
 }
