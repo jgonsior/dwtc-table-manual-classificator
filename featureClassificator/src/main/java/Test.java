@@ -27,8 +27,8 @@ public class Test {
 		PreparedStatement addHtmlStatement = connection.prepareStatement("UPDATE `table` SET htmlCode = ? WHERE id=?");
 		boolean notEmpty = true;
 		while (notEmpty) {
-			ResultSet countTables = connection.createStatement().executeQuery("SELECT COUNT(*) FROM `table` WHERE htmlCode != NULL");
-			ResultSet allTables = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode != NULL ");
+			ResultSet countTables = connection.createStatement().executeQuery("SELECT COUNT(*) FROM `table` WHERE htmlCode IS NULL");
+			ResultSet allTables = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode IS NULL ");
 			if (countTables.getLong(1) == 0) {
 				notEmpty = false;
 			}
