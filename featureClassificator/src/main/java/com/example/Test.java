@@ -1,3 +1,4 @@
+package com.example;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,7 +34,7 @@ public class Test {
 			System.out.println("Start processing " + url);
 			
 			InputStream inputstream = new URL(url).openStream();
-
+			
 			WarcReader warcReader = WarcReaderFactory.getReader(inputstream);
 			WarcRecord warcRecord;
 			
