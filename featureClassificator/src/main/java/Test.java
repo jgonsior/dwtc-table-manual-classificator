@@ -29,7 +29,7 @@ public class Test {
 		while (notEmpty) {
 			ResultSet countTables = connection.createStatement().executeQuery("SELECT COUNT(*) FROM `table` WHERE htmlCode != NULL");
 			ResultSet allTables = getAllTablesStatement.executeQuery("SELECT * FROM `table` WHERE htmlCode != NULL ");
-			if (countTables.getLong(0) == 0) {
+			if (countTables.getLong(1) == 0) {
 				notEmpty = false;
 			}
 			
