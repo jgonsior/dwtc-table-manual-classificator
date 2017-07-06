@@ -91,6 +91,10 @@ public class CreateArff {
 				}
 				htmlTable += "</table>";
 				
+				if (resultSet.getString("htmlCode") != null) {
+					htmlTable = "<table>" + resultSet.getString("htmlCode") + "</table>";
+				}
+				
 				//let jsoup parse the html code again
 				Document document = Jsoup.parse(htmlTable);
 				
