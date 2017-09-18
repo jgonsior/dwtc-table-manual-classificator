@@ -14,7 +14,6 @@
     </properties>
 
 
-
     <repositories>
         <!-- used to import dwtc-tools from Github-->
         <repository>

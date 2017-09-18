@@ -1,44 +1,45 @@
 function toggleClasses(className) {
-  $('table').removeClass('ENTITY');
-  $('table').removeClass('RELATION');
-  $('table').removeClass('RELATION_V');
-  $('table').removeClass('MATRIX');
-  $('table').removeClass('OTHER');
-  $('table').addClass(className);
+    $('table').removeClass('ENTITY');
+    $('table').removeClass('RELATION');
+    $('table').removeClass('RELATION_V');
+    $('table').removeClass('MATRIX');
+    $('table').removeClass('OTHER');
+    $('table').addClass(className);
 }
-$(document).ready(function() {
-  var originalClass = $('h2').attr('type');
-  var id = $("#id").text()
-  console.log("id: "+id)
-  $('#classificationButtons button').filter(function() {
-    return $(this).text() === $('h2').attr('type');
-  }).addClass('btn-primary');
-  $('#classificationButtons button').hover(function() {
-    $('table').addClass($(this).text() + '-hover');
-  }, function() {
-    $('table').removeClass($(this).text() + '-hover');
-    $('table').addClass(originalClass);
-  });
 
-  $(document).keydown(function(e) {
-    if (e.keyCode === 37) { // left arrow
-      e.preventDefault();
-      window.location = $('#prev').attr('href');
-    } else if (e.keyCode === 39) { // right arrow
-      e.preventDefault();
-      window.location = $('#next').attr('href');
-    }
-  });
+$(document).ready(function () {
+    var originalClass = $('h2').attr('type');
+    var id = $("#id").text()
+    console.log("id: " + id)
+    $('#classificationButtons button').filter(function () {
+        return $(this).text() === $('h2').attr('type');
+    }).addClass('btn-primary');
+    $('#classificationButtons button').hover(function () {
+        $('table').addClass($(this).text() + '-hover');
+    }, function () {
+        $('table').removeClass($(this).text() + '-hover');
+        $('table').addClass(originalClass);
+    });
 
-  $('#classificationButtons button').click(function() {
-    var newClass = $(this).text();
-    var jqxhr = $.ajax("/changeClass/" + id + '/' + newClass)
-      .success(function() {
-        console.log("Marked " + id + " as " + newClass);
-        window.location = $('#next').attr('href');
-      }).fail(function() {
-        alert("error");
-      })
-  });
+    $(document).keydown(function (e) {
+        if (e.keyCode === 37) { // left arrow
+            e.preventDefault();
+            window.location = $('#prev').attr('href');
+        } else if (e.keyCode === 39) { // right arrow
+            e.preventDefault();
+            window.location = $('#next').attr('href');
+        }
+    });
+
+    $('#classificationButtons button').click(function () {
+        var newClass = $(this).text();
+        var jqxhr = $.ajax("/changeClass/" + id + '/' + newClass)
+            .success(function () {
+                console.log("Marked " + id + " as " + newClass);
+                window.location = $('#next').attr('href');
+            }).fail(function () {
+                alert("error");
+            })
+    });
 
 });

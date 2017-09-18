@@ -103,6 +103,7 @@ public class CellTools {
 	
 	/**
 	 * Returns true if there is at least one four digits integer (exactly 4 digits!) which is in the range of 1000 to 2100
+	 *
 	 * @param cellContent
 	 * @return
 	 */
@@ -125,11 +126,11 @@ public class CellTools {
 			}
 		}
 		double mean = Arrays.stream(averageStds).average().getAsDouble();
-		int squareSum=0;
-		for(int i=0; i<averageStds.length;i++) {
+		int squareSum = 0;
+		for (int i = 0; i < averageStds.length; i++) {
 			squareSum += Math.pow(averageStds[i] - mean, 2) / averageStds.length;
 		}
-		return Math.sqrt(squareSum/(averageStds.length-1));
+		return Math.sqrt(squareSum / (averageStds.length - 1));
 	}
 	
 	public static double caluclateAverageCellLengthColumnStd(JSONArray jsonArrayTable) throws JSONException {
@@ -143,11 +144,11 @@ public class CellTools {
 		}
 		
 		double mean = Arrays.stream(averageStds).average().getAsDouble();
-		int squareSum=0;
-		for(int i=0; i<averageStds.length;i++) {
+		int squareSum = 0;
+		for (int i = 0; i < averageStds.length; i++) {
 			squareSum += Math.pow(averageStds[i] - mean, 2) / averageStds.length;
 		}
-		return Math.sqrt(squareSum/(averageStds.length-1));
+		return Math.sqrt(squareSum / (averageStds.length - 1));
 	}
 	
 	public static JSONArray transposeTable(JSONArray jsonArrayTable) throws JSONException {

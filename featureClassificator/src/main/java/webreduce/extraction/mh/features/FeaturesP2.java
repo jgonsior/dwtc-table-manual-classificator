@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 public class FeaturesP2 {
 	
+	private static String usedAttributes = "1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
+	
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
 	private static String featureWhiteList =
@@ -140,7 +142,7 @@ public class FeaturesP2 {
 			attributeVector.addElement(newAttr);
 		}
 		
-		classAttrVector = new FastVector(5);
+		classAttrVector = new FastVector(4);
 		classAttrVector.addElement("LAYOUT");
 		classAttrVector.addElement("RELATION");
 		classAttrVector.addElement("ENTITY");
@@ -152,7 +154,15 @@ public class FeaturesP2 {
 	}
 	
 	public static List<String> getFeatureNames() {
-		return Arrays.asList(featureWhiteList.split(", "));
+		ArrayList<String> allFeatureNames = new ArrayList<>(Arrays.asList(featureWhiteList.split(", ")));
+		if (usedAttributes.equals("")) {
+			return allFeatureNames;
+		}
+		List<String> featureNames = new LinkedList<>();
+		for (String attributeNumberString : usedAttributes.split(",")) {
+			featureNames.add(allFeatureNames.get(Integer.parseInt(attributeNumberString) - 1));
+		}
+		return featureNames;
 	}
 	
 	// returns a FastVector containing all attributes plus

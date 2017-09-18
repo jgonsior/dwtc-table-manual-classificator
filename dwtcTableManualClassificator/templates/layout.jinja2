@@ -1,14 +1,14 @@
- {% extends "bootstrap/base.html" %}
+{% extends "bootstrap/base.html" %}
 
- {% block title %}DWTC Table Browser{% endblock %}
+{% block title %}DWTC Table Browser{% endblock %}
 
 {% block styles -%}
-    {{super()}}
+    {{ super() }}
     <link rel="stylesheet" type="text/css"
-          href="{{url_for('static', filename='style.css')}}">
+          href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block scripts %}
-  {{ super() }}
-  <script type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

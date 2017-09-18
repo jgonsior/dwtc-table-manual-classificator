@@ -12,13 +12,13 @@ import java.sql.SQLException;
  * @author: Julius Gonsior
  */
 public class SaveClassifiedResultsToDatabase {
-
+	
 	public static void main(String[] args) {
 		try {
 			
 			ConverterUtils.DataSource source = new ConverterUtils.DataSource("data.arff");
 			Instances unfilteredDataSet = source.getDataSet();
-			unfilteredDataSet.setClassIndex(unfilteredDataSet.numAttributes()-1);
+			unfilteredDataSet.setClassIndex(unfilteredDataSet.numAttributes() - 1);
 			
 			Instances trainingDataSet = unfilteredDataSet;
 			Instances testDataSet = new Instances(unfilteredDataSet);
@@ -38,7 +38,7 @@ public class SaveClassifiedResultsToDatabase {
 			System.out.println(eval.toMatrixString());
 			
 			
-			for(int i=0; i<unfilteredDataSet.numInstances(); i++) {
+			for (int i = 0; i < unfilteredDataSet.numInstances(); i++) {
 				String label = unfilteredDataSet.classAttribute().value((int) randomForest.classifyInstance(unfilteredDataSet.instance(i)));
 				double id = unfilteredDataSet.instance(i).value(0);
 				
@@ -52,7 +52,7 @@ public class SaveClassifiedResultsToDatabase {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

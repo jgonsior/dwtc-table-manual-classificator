@@ -119,7 +119,7 @@ public class CreateArff {
 				//set new class
 				int classAttribute = -1;
 				
-				switch(resultSet.getString("newTableType")) {
+				switch (resultSet.getString("newTableType")) {
 					case "RELATION_V":
 					case "ENTITY":
 						classAttribute = 2;
@@ -136,7 +136,7 @@ public class CreateArff {
 				}
 				
 				instance.setValue(instance.classAttribute(), classAttribute);
-			
+				
 				dataSet.add(instance);
 				
 				dataSet.setClassIndex(instance.classIndex());
@@ -149,11 +149,14 @@ public class CreateArff {
 			arffSaver.setFile(new File("data.arff"));
 			arffSaver.writeBatch();
 			
+			TrainAndCompareClassifier trainAndCompareClassifier = new TrainAndCompareClassifier();
+			trainAndCompareClassifier.main(null);
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

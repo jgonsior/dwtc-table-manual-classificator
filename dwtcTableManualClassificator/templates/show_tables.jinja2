@@ -1,24 +1,25 @@
 {%- extends "layout.jinja2" %}
 
 {% block navbar %}
-{% import '_helpers.jinja2' as helpers %}
-<nav class="navbar navbar-default navbar-static-top">
-  {{ helpers.pagination(entries, 'showTables') }}
-</nav>
+    {% import '_helpers.jinja2' as helpers %}
+    <nav class="navbar navbar-default navbar-static-top">
+        {{ helpers.pagination(entries, 'showTables') }}
+    </nav>
 {%- endblock %}
 
 
 {% block content %}
-<div class="container">
-<ul class=tables>
-    {% for entry in entries.items %}
-    <li>
-        <!-- @todo: bug: loop.index not working pagination right now -->
-        <h2><a href="{{ url_for('showTable', pageId=loop.index) }}">{{ entry.id }}</a> | <a href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
-        <p>{{ entry.originalTableType }}</p>
-        {% else %}
-        <li><em>Unbelievable.  No tables here so far</em> {% endfor %}
-        </li>
-</ul>
-</div>
+    <div class="container">
+        <ul class=tables>
+            {% for entry in entries.items %}
+                <li>
+                    <!-- @todo: bug: loop.index not working pagination right now -->
+                    <h2><a href="{{ url_for('showTable', pageId=loop.index) }}">{{ entry.id }}</a> | <a
+                            href="{{ entry.url }}">{{ entry.pageTitle }}</a></h2>{{ entry.text|safe }}
+                    <p>{{ entry.originalTableType }}</p>
+                    {% else %}
+                <li><em>Unbelievable. No tables here so far</em> {% endfor %}
+            </li>
+        </ul>
+    </div>
 {%- endblock %}

@@ -1,22 +1,18 @@
-import os
-import sqlite3
-import ujson
-import click
-import gzip
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from pprint import pprint
-from collections import defaultdict
 import glob
+import gzip
+import os
+from collections import defaultdict
+from io import BytesIO
+from pprint import pprint
 from random import random
 from urllib.parse import urlsplit
-import boto
-from boto.s3.key import Key
+
+import click
 import requests
-import gzip
-from io import BytesIO, StringIO
+import ujson
+from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)  # create the application instance :)
 Bootstrap(app)
@@ -79,11 +75,11 @@ def initdbCommand(sourcedirectory):
                     # and finally save each entry into a new database
                     rawData = ujson.loads(line)
                     counter[rawData['tableType']] += 1
-                    domain = "{0.scheme}://{0.netloc}/"\
+                    domain = "{0.scheme}://{0.netloc}/" \
                         .format(urlsplit(rawData['url']))
                     domainLimit[domain] += 1
-                    if(counter[rawData['tableType']] < 2000
-                       and domainLimit[domain] < 100):
+                    if (counter[rawData['tableType']] < 2000
+                        and domainLimit[domain] < 100):
                         table = Table(rawData['pageTitle'], rawData['url'],
                                       rawData['title'], rawData['tableType'],
                                       ujson.dumps(rawData['relation']))
@@ -118,12 +114,12 @@ def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
                 if random() < chances_selected:
                     rawData = ujson.loads(line)
                     counter[rawData['tableType']] += 1
-                    domain = "{0.scheme}://{0.netloc}/"\
+                    domain = "{0.scheme}://{0.netloc}/" \
                         .format(urlsplit(rawData['url']))
                     domainLimit[domain] += 1
-                    if(counter[rawData['tableType']] < 2000
-                       and domainLimit[domain] < 100
-                       and rawData['tableType'] == tabletype):
+                    if (counter[rawData['tableType']] < 2000
+                        and domainLimit[domain] < 100
+                        and rawData['tableType'] == tabletype):
                         table = Table(rawData['pageTitle'], rawData['url'],
                                       rawData['title'], rawData['tableType'],
                                       ujson.dumps(rawData['relation']))
@@ -167,7 +163,7 @@ def getS3Links(sourcedirectory):
                     if table.url == rawData['url']:
                         if table.cells == ujson.dumps(rawData['relation']):
                             count += 1
-                            if(count > 1):
+                            if (count > 1):
                                 print("#" * 100)
                                 print("duplicate found!!!")
                                 pprint(rawData)
@@ -190,15 +186,16 @@ def getOriginalHtmlFromS3():
     # load all entries out of the database
     tables = Table.query.all()
 
-    #for key in publicDatasets.list():
+    # for key in publicDatasets.list():
     #    print(key.name.encode('utf-8'))
 
     for table in tables:
         print("Downloading https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:])
-        response = requests.get("https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:], headers={'Range': 'bytes={}-{}'.format(table.recordOffset, table.recordEndOffset)})
+        response = requests.get("https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:],
+                                headers={'Range': 'bytes={}-{}'.format(table.recordOffset, table.recordEndOffset)})
 
         raw_data = BytesIO(response.content)
-        #stringio = StringIO(raw_data.read().decode('latin-1'))
+        # stringio = StringIO(raw_data.read().decode('latin-1'))
         with gzip.GzipFile(fileobj=raw_data) as f:
             print("whut")
             pprint(f.read())
@@ -211,26 +208,27 @@ def getOriginalHtmlFromS3():
         return
 
 
-        #common-crawl/crawl-data/CC-MAIN-2014-23/segments/1405997894799.55/warc/CC-MAIN-20140722025814-00066-ip-10-33-131-23.ec2.internal.warc.gz
-        #key = Key(publicDatasets, "crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00023-ip-10-180-212-248.ec2.internal.warc.gz")
-        #"s3://commoncrawl/crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00001-ip-10-180-212-248.ec2.internal.warc.gz" #+ table.s3Link
-        #print(key)
-        #print(key.read(100))
+        # common-crawl/crawl-data/CC-MAIN-2014-23/segments/1405997894799.55/warc/CC-MAIN-20140722025814-00066-ip-10-33-131-23.ec2.internal.warc.gz
+        # key = Key(publicDatasets, "crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00023-ip-10-180-212-248.ec2.internal.warc.gz")
+        # "s3://commoncrawl/crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00001-ip-10-180-212-248.ec2.internal.warc.gz" #+ table.s3Link
+        # print(key)
+        # print(key.read(100))
+
 
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
-    # entries = db.session.query(Table).paginate(page, 100)
-    entries = db.session.query(Table).filter(
-        Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
+    entries = db.session.query(Table).paginate(page, 100)
+    # entries = db.session.query(Table).filter(
+    #    Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:pageId>')
 def showTable(pageId):
-    #entries = db.session.query(Table).paginate(pageId, 1)
-    entries = db.session.query(Table).filter(
-        Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
+    entries = db.session.query(Table).paginate(pageId, 1)
+    # entries = db.session.query(Table).filter(
+    #    Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
     meta = entries.items[0]
     table = ujson.loads(meta.cells)
 
@@ -252,4 +250,4 @@ def changeClass(tableId, newTableType):
     table.tempTableType = newTableType
     db.session.commit()
     return ujson.dumps({'success': True}), 200, \
-        {'ContentType': 'application/json'}
+           {'ContentType': 'application/json'}

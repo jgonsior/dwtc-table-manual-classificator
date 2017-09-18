@@ -19,10 +19,12 @@ public class TrainAndCompareClassifier {
 			
 			DataSource source = new DataSource("data.arff");
 			Instances unfilteredDataSet = source.getDataSet();
-			unfilteredDataSet.setClassIndex(unfilteredDataSet.numAttributes()-1);
+			unfilteredDataSet.setClassIndex(unfilteredDataSet.numAttributes() - 1);
+			
 			
 			// train new classifier
 			RandomForest randomForest = new RandomForest();
+			randomForest.setOptions(weka.core.Utils.splitOptions("-K 0 -S 1"));
 			//randomForest.buildClassifier(dataSet);
 			
 			// filter out id
@@ -34,7 +36,7 @@ public class TrainAndCompareClassifier {
 			
 			// evaluate
 			Evaluation newEvaluation = new Evaluation(dataSet);
-			newEvaluation.crossValidateModel(randomForest, dataSet, 10, new Random(1));
+			newEvaluation.crossValidateModel(randomForest, dataSet, 10, new Random());
 			
 			System.out.println(newEvaluation.toSummaryString());
 			System.out.println(newEvaluation.toClassDetailsString());
@@ -42,11 +44,14 @@ public class TrainAndCompareClassifier {
 			
 			System.out.println("----------------------------------------");
 			
+			weka.core.SerializationHelper.write("RandomForest2017_P2.mdl", randomForest);
+			
+			
 			// compare with results from old Classifier
-			Classifier oldClassifier = (Classifier) weka.core.SerializationHelper.read("RandomForest_P2.mdl");
+			Classifier oldPhase2Classifier = (Classifier) weka.core.SerializationHelper.read("RandomForest_P2.mdl");
 			
 			Evaluation oldEvaluation = new Evaluation(dataSet);
-			oldEvaluation.evaluateModel(oldClassifier, dataSet);
+			oldEvaluation.evaluateModel(oldPhase2Classifier, dataSet);
 			
 			System.out.println(oldEvaluation.toSummaryString());
 			System.out.println(oldEvaluation.toClassDetailsString());
@@ -56,7 +61,7 @@ public class TrainAndCompareClassifier {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
