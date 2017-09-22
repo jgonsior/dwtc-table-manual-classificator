@@ -25,7 +25,6 @@ public class TrainAndCompareClassifier {
 			// train new classifier
 			RandomForest randomForest = new RandomForest();
 			randomForest.setOptions(weka.core.Utils.splitOptions("-K 0 -S 1"));
-			//randomForest.buildClassifier(dataSet);
 			
 			// filter out id
 			Remove remove = new Remove();
@@ -33,6 +32,8 @@ public class TrainAndCompareClassifier {
 			remove.setInputFormat(unfilteredDataSet);
 			
 			Instances dataSet = Filter.useFilter(unfilteredDataSet, remove);
+			
+			//randomForest.buildClassifier(dataSet);
 			
 			// evaluate
 			Evaluation newEvaluation = new Evaluation(dataSet);
@@ -44,7 +45,7 @@ public class TrainAndCompareClassifier {
 			
 			System.out.println("----------------------------------------");
 			
-			weka.core.SerializationHelper.write("RandomForest2017_P2.mdl", randomForest);
+			//weka.core.SerializationHelper.write("RandomForest2017_P2.mdl", randomForest);
 			
 			
 			// compare with results from old Classifier

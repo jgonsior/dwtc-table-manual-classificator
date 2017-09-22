@@ -218,17 +218,19 @@ def getOriginalHtmlFromS3():
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
-    entries = db.session.query(Table).paginate(page, 100)
-    # entries = db.session.query(Table).filter(
-    #    Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(page, 100)
+    #entries = db.session.query(Table).paginate(page, 100)
+    entries = db.session.query(Table).filter(
+        Table.newTableType != Table.label).paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:pageId>')
 def showTable(pageId):
-    entries = db.session.query(Table).paginate(pageId, 1)
-    # entries = db.session.query(Table).filter(
-    #    Table.newTableType != Table.label, Table.newTableType == "RELATION_V").paginate(pageId, 1)
+    #entries = db.session.query(Table).paginate(pageId, 1)
+    entries = db.session.query(Table).filter(
+        Table.newTableType != Table.label).paginate(pageId, 1)
+    #entries = db.session.query(Table).filter(
+    #    Table.label == "MATRIX").paginate(pageId, 1)
     meta = entries.items[0]
     table = ujson.loads(meta.cells)
 
