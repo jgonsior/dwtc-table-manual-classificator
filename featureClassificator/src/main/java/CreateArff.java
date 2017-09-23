@@ -23,7 +23,7 @@ public class CreateArff {
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT count(originalTableType), originalTableType FROM `table` GROUP BY originalTableType");
+			ResultSet resultSet = statement.executeQuery("SELECT count(originalTableType), originalTableType FROM `table` GROUP BY originalTableType ");
 			while (resultSet.next()) {
 				System.out.println("Original table type: " + resultSet.getString(2) + ": " + resultSet.getInt(1));
 			}
@@ -54,7 +54,7 @@ public class CreateArff {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL LIMIT 100");
 			
 			int hori = 0;
 			int verti = 0;

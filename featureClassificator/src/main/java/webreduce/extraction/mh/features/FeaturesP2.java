@@ -23,113 +23,55 @@ public class FeaturesP2 {
 	
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
-	private static String featureWhiteList =
-			"AVG_CELL_LENGTH, " +
-					"CUMULATIVE_CONTENT_CONSISTENCY, " +
-					"ID, " +
-					"LOCAL_AVG_LENGTH_ROW_0, " +
-					"LOCAL_AVG_LENGTH_ROW_1, " +
-					"LOCAL_AVG_LENGTH_ROW_2, " +
-					"LOCAL_AVG_LENGTH_COL_0, " +
-					"LOCAL_AVG_LENGTH_COL_1, " +
-					"LOCAL_AVG_LENGTH_COL_2, " +
-					"LOCAL_LENGTH_VARIANCE_ROW_0, " +
-					"LOCAL_LENGTH_VARIANCE_ROW_1, " +
-					"LOCAL_LENGTH_VARIANCE_ROW_2, " +
-					"LOCAL_LENGTH_VARIANCE_COL_0, " +
-					"LOCAL_LENGTH_VARIANCE_COL_1, " +
-					"LOCAL_LENGTH_VARIANCE_COL_2, " +
-					"LOCAL_RATIO_ANCHOR_ROW_0, " +
-					"LOCAL_RATIO_ANCHOR_ROW_1, " +
-					"LOCAL_RATIO_ANCHOR_ROW_2, " +
-					"LOCAL_RATIO_ANCHOR_COL_0, " +
-					"LOCAL_RATIO_ANCHOR_COL_1, " +
-					"LOCAL_RATIO_ANCHOR_COL_2, " +
-					"LOCAL_RATIO_IMAGE_ROW_0, " +
-					"LOCAL_RATIO_IMAGE_ROW_1, " +
-					"LOCAL_RATIO_IMAGE_ROW_2, " +
-					"LOCAL_RATIO_IMAGE_COL_0, " +
-					"LOCAL_RATIO_IMAGE_COL_1, " +
-					"LOCAL_RATIO_IMAGE_COL_2, " +
-					"LOCAL_RATIO_INPUT_ROW_0, " +
-					"LOCAL_RATIO_INPUT_ROW_1, " +
-					"LOCAL_RATIO_INPUT_ROW_2, " +
-					"LOCAL_RATIO_INPUT_COL_0, " +
-					"LOCAL_RATIO_INPUT_COL_1, " +
-					"LOCAL_RATIO_INPUT_COL_2, " +
-					"LOCAL_RATIO_SELECT_ROW_0, " +
-					"LOCAL_RATIO_SELECT_ROW_1, " +
-					"LOCAL_RATIO_SELECT_ROW_2, " +
-					"LOCAL_RATIO_SELECT_COL_0, " +
-					"LOCAL_RATIO_SELECT_COL_1, " +
-					"LOCAL_RATIO_SELECT_COL_2, " +
-					"LOCAL_RATIO_COLON_COL_0, " +
-					"LOCAL_RATIO_COLON_COL_1, " +
-					"LOCAL_RATIO_COLON_COL_2, " +
-					"LOCAL_RATIO_COLON_ROW_0, " +
-					"LOCAL_RATIO_COLON_ROW_1, " +
-					"LOCAL_RATIO_COLON_ROW_2, " +
-					"LOCAL_RATIO_COMMA_COL_0, " +
-					"LOCAL_RATIO_COMMA_COL_1, " +
-					"LOCAL_RATIO_COMMA_COL_2, " +
-					"LOCAL_RATIO_COMMA_ROW_0, " +
-					"LOCAL_RATIO_COMMA_ROW_1, " +
-					"LOCAL_RATIO_COMMA_ROW_2, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_COL_0, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_COL_1, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_COL_2, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, " +
-					"LOCAL_RATIO_CONTAINS_NUMBER_ROW_2, " +
-					"LOCAL_RATIO_HEADER_COL_0, " +
-					"LOCAL_RATIO_HEADER_COL_1, " +
-					"LOCAL_RATIO_HEADER_COL_2, " +
-					"LOCAL_RATIO_HEADER_ROW_0, " +
-					"LOCAL_RATIO_HEADER_ROW_1, " +
-					"LOCAL_RATIO_HEADER_ROW_2, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_0, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_1, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_ROW_2, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_0, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_1, " +
-					"LOCAL_RATIO_CONTAINS_WHITESPACE_COL_2, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_ROW_0, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_ROW_1, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_ROW_2, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_COL_0, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_COL_1, " +
-					"LOCAL_RATIO_SPECIAL_CHAR_COL_2, " +
-					"LOCAL_RATIO_PERCENTAGE_ROW_0, " +
-					"LOCAL_RATIO_PERCENTAGE_ROW_1, " +
-					"LOCAL_RATIO_PERCENTAGE_ROW_2, " +
-					"LOCAL_RATIO_PERCENTAGE_COL_0, " +
-					"LOCAL_RATIO_PERCENTAGE_COL_1, " +
-					"LOCAL_RATIO_PERCENTAGE_COL_2, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_ROW_0, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_ROW_1, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_ROW_2, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_COL_0, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_COL_1, " +
-					"LOCAL_RATIO_CONTAINS_YEAR_COL_2, " +
-					"LOCAL_RATIO_IS_NUMBER_COL_0, " +
-					"LOCAL_RATIO_IS_NUMBER_COL_1, " +
-					"LOCAL_RATIO_IS_NUMBER_COL_2, " +
-					"LOCAL_RATIO_IS_NUMBER_ROW_0, " +
-					"LOCAL_RATIO_IS_NUMBER_ROW_1, " +
-					"LOCAL_RATIO_IS_NUMBER_ROW_2, " +
+	private static String featureWhiteList = "ID, " +
+			//"CUMULATIVE_CONTENT_CONSISTENCY, " +
+			/*"AVG_CELL_LENGTH, " +
 					"AVG_COLS, " +
 					"AVG_ROWS, " +
-					"MAX_COLS, " +
 					"RATIO_ALPHABETICAL, " +
-					"STD_DEV_COLS, " +
-					"AREA_SIZE, " +
-					"STD_DEV_ROWS, ";
+					"STD_DEV_COLS, " +*/
+					/*"MAX_ROWS, " +
+					"MAX_COLS, " +
+					"AREA_SIZE, " +*/
+			"RATIO_EMPTY_CELLS, ";// +
+	//"STD_DEV_ROWS, ";
+	
+	static {
+		List<String> whiteListFeatures = new LinkedList<>();
+		//whiteListFeatures.add("LOCAL_RATIO_EMPTY");
+		whiteListFeatures.add("LOCAL_EMPTY_VARIANCE");
+		/*whiteListFeatures.add("LOCAL_AVG_LENGTH");
+		whiteListFeatures.add("LOCAL_LENGTH_VARIANCE");
+		whiteListFeatures.add("LOCAL_RATIO_ANCHOR");
+		whiteListFeatures.add("LOCAL_RATIO_IMAGE");
+		whiteListFeatures.add("LOCAL_RATIO_INPUT");
+		whiteListFeatures.add("LOCAL_RATIO_SELECT");
+		whiteListFeatures.add("LOCAL_RATIO_COLON");
+		whiteListFeatures.add("LOCAL_RATIO_COMMA");
+		whiteListFeatures.add("LOCAL_RATIO_CONTAINS_NUMBER");
+		whiteListFeatures.add("LOCAL_RATIO_HEADER");
+		whiteListFeatures.add("LOCAL_RATIO_CONTAINS_WHITESPACE");
+		whiteListFeatures.add("LOCAL_RATIO_SPECIAL_CHAR");
+		whiteListFeatures.add("LOCAL_RATIO_PERCENTAGE");
+		whiteListFeatures.add("LOCAL_RATIO_CONTAINS_YEAR");
+		whiteListFeatures.add("LOCAL_RATIO_IS_NUMBER");*/
+		
+		for (String feature : whiteListFeatures) {
+			featureWhiteList += feature + "_COL_0, ";
+			featureWhiteList += feature + "_COL_1, ";
+			featureWhiteList += feature + "_COL_2, ";
+			featureWhiteList += feature + "_ROW_0, ";
+			featureWhiteList += feature + "_ROW_1, ";
+			featureWhiteList += feature + "_ROW_2, ";
+		}
+		
+	}
+	
 	/**
 	 * obere liste automatisch erstellen lassen!
 	 * <p>
 	 * neue features:
-	 * - area berechnen
-	 * - isNumber zusätzlich zu contains number
+	 * - std_dev for empty cells?
 	 * - CUMULATIVE_CONTENT_CONSISTENCY zusätzlich für alles außer 0,1,2 (row + column), außer es gibt nicht so viele
 	 * - testen ob es Sinn  macht sowas wie CUMULATIVE_CONTENT_CONSISTENCY für ohne 0,1,2 auch für sachen wie LOCAL zu implementieren (ERST AM ENDE)
 	 */
@@ -196,8 +138,10 @@ public class FeaturesP2 {
 	public void initializeFeatures() {
 		// Add global features to computation list
 		globalListeners = new ArrayList<AbstractTableListener>();
+		globalListeners.add(new RatioEmptyCells());
 		globalListeners.add(new AreaSize());
 		globalListeners.add(new MaxCols());
+		globalListeners.add(new MaxRows());
 		globalListeners.add(new AvgRows());
 		globalListeners.add(new AvgCols());
 		globalListeners.add(new AvgCellLength());
@@ -211,6 +155,8 @@ public class FeaturesP2 {
 		localListeners.add(new LocalAvgLength());
 		localListeners.add(new LocalContentRatios());
 		localListeners.add(new LocalLengthVariance());
+		localListeners.add(new LocalEmptyRatio());
+		localListeners.add(new LocalEmptyVariance());
 	}
 	
 	public Instance computeFeatures(Element[][] convertedTable) {
@@ -452,6 +398,39 @@ public class FeaturesP2 {
 		}
 	}
 	
+	public class RatioEmptyCells extends AbstractTableListener {
+		
+		private double cellCountEmpty;
+		private double cellCount;
+		
+		public RatioEmptyCells() {
+			featureName = "RATIO_EMPTY_CELLS";
+		}
+		
+		public void initialize(TableStats stats) {
+			cellCountEmpty = 0;
+			cellCount = stats.getTableWidth() * stats.getTableHeight();
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+			if (content == null) {
+				cellCountEmpty++;
+			}
+		}
+		
+		public void finalize() {
+		
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			
+			// the ratio is 1 if there are no empty cells, and 0 if there are a lot
+			result.put(featureName, new Double(cellCountEmpty / cellCount));
+			return result;
+		}
+	}
+	
 	public class MaxCols extends AbstractTableListener {
 		
 		private double maxCols;
@@ -479,9 +458,37 @@ public class FeaturesP2 {
 		}
 	}
 	
+	
+	public class MaxRows extends AbstractTableListener {
+		
+		private double maxRows;
+		
+		public MaxRows() {
+			featureName = "MAX_ROWS";
+		}
+		
+		public void initialize(TableStats stats) {
+			maxRows = stats.getTableHeight();
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+		
+		}
+		
+		public void finalize() {
+		
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			result.put(featureName, new Double(maxRows));
+			return result;
+		}
+	}
+	
 	public class AvgCols extends AbstractTableListener {
 		
-		private int cellCount;
+		private int cellCountNotEmpty;
 		private double avgCols;
 		private int tableHeight;
 		
@@ -490,18 +497,18 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			cellCount = 0;
+			cellCountNotEmpty = 0;
 			tableHeight = stats.getTableHeight();
 		}
 		
 		public void onCell(Element content, TableStats stats) {
 			if (content != null) {
-				cellCount++;
+				cellCountNotEmpty++;
 			}
 		}
 		
 		public void finalize() {
-			avgCols = ((double) cellCount) / ((double) tableHeight);
+			avgCols = ((double) cellCountNotEmpty) / ((double) tableHeight);
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -513,7 +520,7 @@ public class FeaturesP2 {
 	
 	public class AvgCellLength extends AbstractTableListener {
 		
-		private int cellCount;
+		private int cellCountNotEmpty;
 		private int totalLength;
 		private double avgLength;
 		
@@ -522,20 +529,20 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			cellCount = 0;
+			cellCountNotEmpty = 0;
 			totalLength = 0;
 		}
 		
 		public void onCell(Element content, TableStats stats) {
 			if (content != null) {
-				cellCount++;
+				cellCountNotEmpty++;
 				// totalLength += content.text().length();
 				totalLength += CellTools.getCellLength(content);
 			}
 		}
 		
 		public void finalize() {
-			avgLength = ((double) totalLength) / ((double) cellCount);
+			avgLength = ((double) totalLength) / ((double) cellCountNotEmpty);
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -645,7 +652,7 @@ public class FeaturesP2 {
 	
 	public class AvgRows extends AbstractTableListener {
 		
-		private int cellCount;
+		private int cellCountNotEmpty;
 		private double avgRows;
 		private int tableWidth;
 		
@@ -654,18 +661,18 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			cellCount = 0;
+			cellCountNotEmpty = 0;
 			tableWidth = stats.getTableWidth();
 		}
 		
 		public void onCell(Element content, TableStats stats) {
 			if (content != null) {
-				cellCount++;
+				cellCountNotEmpty++;
 			}
 		}
 		
 		public void finalize() {
-			avgRows = ((double) cellCount) / ((double) tableWidth);
+			avgRows = ((double) cellCountNotEmpty) / ((double) tableWidth);
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -677,7 +684,7 @@ public class FeaturesP2 {
 	
 	public class ContentRatios extends AbstractTableListener {
 		
-		private int cellCount, images, alphabetical, digits;
+		private int cellCountNotEmpty, images, alphabetical, digits;
 		private double image_ratio, alphabetical_ratio,
 				digit_ratio;
 		
@@ -686,7 +693,7 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			cellCount = 0;
+			cellCountNotEmpty = 0;
 			images = 0;
 			alphabetical = 0;
 			digits = 0;
@@ -694,7 +701,7 @@ public class FeaturesP2 {
 		
 		public void onCell(Element content, TableStats stats) {
 			if (content != null) {
-				cellCount++;
+				cellCountNotEmpty++;
 				
 				ContentType ct = CellTools.getContentType(content);
 				
@@ -715,9 +722,9 @@ public class FeaturesP2 {
 		}
 		
 		public void finalize() {
-			image_ratio = (cellCount > 0) ? ((double) images / (double) cellCount) : 0.0;
-			alphabetical_ratio = (cellCount > 0) ? ((double) alphabetical / (double) cellCount) : 0.0;
-			digit_ratio = (cellCount > 0) ? ((double) digits / (double) cellCount) : 0.0;
+			image_ratio = (cellCountNotEmpty > 0) ? ((double) images / (double) cellCountNotEmpty) : 0.0;
+			alphabetical_ratio = (cellCountNotEmpty > 0) ? ((double) alphabetical / (double) cellCountNotEmpty) : 0.0;
+			digit_ratio = (cellCountNotEmpty > 0) ? ((double) digits / (double) cellCountNotEmpty) : 0.0;
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -895,6 +902,81 @@ public class FeaturesP2 {
 		}
 	}
 	
+	public class LocalEmptyRatio extends AbstractTableListener {
+		private int countRatioEmptyCells;
+		private int totalLocalCellCount;
+		
+		public LocalEmptyRatio() {
+			featureName = "LOCAL_RATIO_EMPTY";
+		}
+		
+		public void initialize(TableStats stats) {
+			countRatioEmptyCells = 0;
+			totalLocalCellCount = 0;
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+			if (content == null) {
+				countRatioEmptyCells++;
+			}
+			totalLocalCellCount++;
+		}
+		
+		public void finalize() {
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			result.put(featureName, new Double(countRatioEmptyCells / totalLocalCellCount));
+			return result;
+		}
+	}
+	
+	
+	public class LocalEmptyVariance extends AbstractTableListener {
+		
+		private ArrayList<Integer> cellLengths;
+		private double average, variance;
+		
+		public LocalEmptyVariance() {
+			featureName = "LOCAL_EMPTY_VARIANCE";
+		}
+		
+		public void initialize(TableStats stats) {
+			cellLengths = new ArrayList<Integer>();
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+			if (content == null) {
+				cellLengths.add(1);
+			}
+		}
+		
+		public void finalize() {
+			double sum = 0.0;
+			for (Integer length : cellLengths) {
+				sum += length;
+			}
+			
+			double totalCells = (double) cellLengths.size();
+			average = (totalCells > 0) ? (sum / totalCells) : 0.0;
+			
+			double varSum = 0.0;
+			for (Integer length : cellLengths) {
+				double inner = (length - average);
+				double temp = Math.pow(inner, 2);
+				varSum += temp;
+			}
+			variance = (totalCells > 0) ? (varSum / totalCells) : 0.0;
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			result.put(featureName, new Double(variance));
+			return result;
+		}
+	}
+	
 	public class LocalLengthVariance extends AbstractTableListener {
 		
 		private ArrayList<Integer> cellLengths;
@@ -941,7 +1023,7 @@ public class FeaturesP2 {
 	
 	public class LocalContentRatios extends AbstractTableListener {
 		
-		private int cellCount, count_th, count_anchor, count_img, count_input, count_select,
+		private int cellCountNotEmpty, count_th, count_anchor, count_img, count_input, count_select,
 				count_contains_number, count_is_number, count_colon, count_comma, count_contains_whitespace,
 				count_contains_year, count_percentage, count_special_char;
 		private double ratio_th, ratio_anchor, ratio_img, ratio_input, ratio_select,
@@ -953,7 +1035,7 @@ public class FeaturesP2 {
 		}
 		
 		public void initialize(TableStats stats) {
-			cellCount = count_th = count_anchor = count_img = count_input = count_select =
+			cellCountNotEmpty = count_th = count_anchor = count_img = count_input = count_select =
 					count_contains_number = count_is_number = count_colon = count_comma = count_contains_whitespace =
 							count_contains_year = count_percentage = count_special_char = 0;
 		}
@@ -991,6 +1073,7 @@ public class FeaturesP2 {
 			if (cleanedContent.matches(".*\\d.*")) {
 				count_contains_number++;
 			}
+			
 			// check if only digit
 			if (CellTools.isNumericOnly(cleanedContent)) {
 				count_is_number++;
@@ -1012,24 +1095,24 @@ public class FeaturesP2 {
 				count_special_char++;
 			}
 			
-			cellCount++;
+			cellCountNotEmpty++;
 		}
 		
 		public void finalize() {
-			ratio_th = (cellCount > 0) ? ((double) count_th / (double) cellCount) : 0.0;
-			ratio_anchor = (cellCount > 0) ? ((double) count_anchor / (double) cellCount) : 0.0;
-			ratio_img = (cellCount > 0) ? ((double) count_img / (double) cellCount) : 0.0;
-			ratio_input = (cellCount > 0) ? ((double) count_input / (double) cellCount) : 0.0;
-			ratio_select = (cellCount > 0) ? ((double) count_select / (double) cellCount) : 0.0;
-			ratio_colon = (cellCount > 0) ? ((double) count_colon / (double) cellCount) : 0.0;
+			ratio_th = (cellCountNotEmpty > 0) ? ((double) count_th / (double) cellCountNotEmpty) : 0.0;
+			ratio_anchor = (cellCountNotEmpty > 0) ? ((double) count_anchor / (double) cellCountNotEmpty) : 0.0;
+			ratio_img = (cellCountNotEmpty > 0) ? ((double) count_img / (double) cellCountNotEmpty) : 0.0;
+			ratio_input = (cellCountNotEmpty > 0) ? ((double) count_input / (double) cellCountNotEmpty) : 0.0;
+			ratio_select = (cellCountNotEmpty > 0) ? ((double) count_select / (double) cellCountNotEmpty) : 0.0;
+			ratio_colon = (cellCountNotEmpty > 0) ? ((double) count_colon / (double) cellCountNotEmpty) : 0.0;
 			ratio_contains_number =
-					(cellCount > 0) ? ((double) count_contains_number / (double) cellCount) : 0.0;
-			ratio_is_number = (cellCount > 0) ? ((double) count_is_number / (double) cellCount) : 0.0;
-			ratio_comma = (cellCount > 0) ? ((double) count_comma / (double) cellCount) : 0.0;
-			ratio_contains_whitespace = (cellCount > 0) ? ((double) count_contains_whitespace / (double) cellCount) : 0.0;
-			ratio_contains_year = (cellCount > 0) ? ((double) count_contains_year / (double) cellCount) : 0.0;
-			ratio_percentage = (cellCount > 0) ? ((double) count_percentage / (double) cellCount) : 0.0;
-			ratio_special_char = (cellCount > 0) ? ((double) count_special_char / (double) cellCount) : 0.0;
+					(cellCountNotEmpty > 0) ? ((double) count_contains_number / (double) cellCountNotEmpty) : 0.0;
+			ratio_is_number = (cellCountNotEmpty > 0) ? ((double) count_is_number / (double) cellCountNotEmpty) : 0.0;
+			ratio_comma = (cellCountNotEmpty > 0) ? ((double) count_comma / (double) cellCountNotEmpty) : 0.0;
+			ratio_contains_whitespace = (cellCountNotEmpty > 0) ? ((double) count_contains_whitespace / (double) cellCountNotEmpty) : 0.0;
+			ratio_contains_year = (cellCountNotEmpty > 0) ? ((double) count_contains_year / (double) cellCountNotEmpty) : 0.0;
+			ratio_percentage = (cellCountNotEmpty > 0) ? ((double) count_percentage / (double) cellCountNotEmpty) : 0.0;
+			ratio_special_char = (cellCountNotEmpty > 0) ? ((double) count_special_char / (double) cellCountNotEmpty) : 0.0;
 		}
 		
 		public HashMap<String, Double> getResults() {
@@ -1051,6 +1134,4 @@ public class FeaturesP2 {
 			return result;
 		}
 	}
-	
-	
 }
