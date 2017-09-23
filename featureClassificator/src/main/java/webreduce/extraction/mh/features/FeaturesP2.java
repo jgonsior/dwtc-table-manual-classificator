@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class FeaturesP2 {
 	
-	private static String usedAttributes = "1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
+	private static String usedAttributes = ""; //"1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
 	
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
@@ -117,13 +117,22 @@ public class FeaturesP2 {
 					"LOCAL_RATIO_IS_NUMBER_ROW_0, " +
 					"LOCAL_RATIO_IS_NUMBER_ROW_1, " +
 					"LOCAL_RATIO_IS_NUMBER_ROW_2, " +
+					"AVG_COLS, " +
+					"AVG_ROWS, " +
 					"MAX_COLS, " +
 					"RATIO_ALPHABETICAL, " +
 					"STD_DEV_COLS, " +
+					"AREA_SIZE, " +
 					"STD_DEV_ROWS, ";
-	
-	
-	//"ID, LOCAL_RATIO_IS_NUMBER_COL_0, AVG_CELL_LENGTH, LOCAL_RATIO_IS_NUMBER_COL_2, LOCAL_RATIO_COLON_ROW_1, LOCAL_RATIO_ANCHOR_ROW_2, LOCAL_LENGTH_VARIANCE_COL_2, LOCAL_AVG_LENGTH_ROW_0, LOCAL_AVG_LENGTH_ROW_2, LOCAL_RATIO_HEADER_ROW_0, CUMULATIVE_CONTENT_CONSISTENCY, STD_DEV_ROWS, RATIO_ALPHABETICAL, LOCAL_RATIO_COMMA_COL_0, LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, STD_DEV_COLS, LOCAL_RATIO_COLON_COL_0, MAX_COLS, LOCAL_RATIO_CONTAINS_NUMBER_COL_2, LOCAL_RATIO_HEADER_COL_1, LOCAL_RATIO_HEADER_COL_2, LOCAL_RATIO_CONTAINS_NUMBER_COL_0, AVG_COLS";
+	/**
+	 * obere liste automatisch erstellen lassen!
+	 * <p>
+	 * neue features:
+	 * - area berechnen
+	 * - isNumber zusätzlich zu contains number
+	 * - CUMULATIVE_CONTENT_CONSISTENCY zusätzlich für alles außer 0,1,2 (row + column), außer es gibt nicht so viele
+	 * - testen ob es Sinn  macht sowas wie CUMULATIVE_CONTENT_CONSISTENCY für ohne 0,1,2 auch für sachen wie LOCAL zu implementieren (ERST AM ENDE)
+	 */
 	
 	private ArrayList<AbstractTableListener> globalListeners;
 	private ArrayList<AbstractTableListener> localListeners;
@@ -187,6 +196,7 @@ public class FeaturesP2 {
 	public void initializeFeatures() {
 		// Add global features to computation list
 		globalListeners = new ArrayList<AbstractTableListener>();
+		globalListeners.add(new AreaSize());
 		globalListeners.add(new MaxCols());
 		globalListeners.add(new AvgRows());
 		globalListeners.add(new AvgCols());
@@ -411,6 +421,33 @@ public class FeaturesP2 {
 		public HashMap<String, Double> getResults() {
 			HashMap<String, Double> result = new HashMap<String, Double>();
 			result.put(featureName, new Double(0));
+			return result;
+		}
+	}
+	
+	public class AreaSize extends AbstractTableListener {
+		
+		private double areaSize;
+		
+		public AreaSize() {
+			featureName = "AREA_SIZE";
+		}
+		
+		public void initialize(TableStats stats) {
+			areaSize = stats.getTableWidth() * stats.getTableHeight();
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+		
+		}
+		
+		public void finalize() {
+		
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			result.put(featureName, new Double(areaSize));
 			return result;
 		}
 	}
