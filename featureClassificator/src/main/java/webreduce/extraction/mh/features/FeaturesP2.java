@@ -58,15 +58,25 @@ public class FeaturesP2 {
 		whiteListFeatures.add("LOCAL_RATIO_CONTAINS_YEAR");
 		whiteListFeatures.add("LOCAL_RATIO_IS_NUMBER");
 		
+		
+		/**
+		 * 0,1 -> first two rows/cols
+		 * 2,3 -> the two middle most rows
+		 * 4,5 -> the last tow rows
+		 */
 		for (String feature : whiteListFeatures) {
 			featureWhiteList += feature + "_COL_0, ";
 			featureWhiteList += feature + "_COL_1, ";
 			featureWhiteList += feature + "_COL_2, ";
 			featureWhiteList += feature + "_COL_3, ";
+			featureWhiteList += feature + "_COL_4, ";
+			featureWhiteList += feature + "_COL_5, ";
 			featureWhiteList += feature + "_ROW_0, ";
 			featureWhiteList += feature + "_ROW_1, ";
 			featureWhiteList += feature + "_ROW_2, ";
 			featureWhiteList += feature + "_ROW_3, ";
+			featureWhiteList += feature + "_ROW_4, ";
+			featureWhiteList += feature + "_ROW_5, ";
 		}
 		
 	}
@@ -211,6 +221,8 @@ public class FeaturesP2 {
 		List<Integer> localRowIndexes = new LinkedList<>();
 		localRowIndexes.add(0);
 		localRowIndexes.add(1);
+		localRowIndexes.add((int) Math.floor(tStats.getTableHeight() / 2));
+		localRowIndexes.add((int) Math.ceil(tStats.getTableHeight() / 2));
 		localRowIndexes.add(tStats.getTableHeight() - 2);
 		localRowIndexes.add(tStats.getTableHeight() - 1);
 		
@@ -254,6 +266,8 @@ public class FeaturesP2 {
 		List<Integer> localColIndexes = new LinkedList<>();
 		localColIndexes.add(0);
 		localColIndexes.add(1);
+		localColIndexes.add((int) Math.floor(tStats.getTableWidth() / 2));
+		localColIndexes.add((int) Math.ceil(tStats.getTableWidth() / 2));
 		localColIndexes.add(tStats.getTableWidth() - 2);
 		localColIndexes.add(tStats.getTableWidth() - 1);
 		

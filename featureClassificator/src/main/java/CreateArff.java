@@ -78,21 +78,22 @@ public class CreateArff {
 					verti++;
 				}*/
 				
-				// convert json to html code
-				String htmlTable = "<table>";
-				for (int i = 0; i < jsonArrayTable.length(); i++) {
-					htmlTable += "<tr>";
-					JSONArray row = jsonArrayTable.getJSONArray(i);
-					for (int j = 0; j < row.length(); j++) {
-						String cell = row.getString(j);
-						htmlTable += "<td>" + cell + "</td>";
-					}
-					htmlTable += "</tr>";
-				}
-				htmlTable += "</table>";
-				
+				String htmlTable = "";
 				if (resultSet.getString("htmlCode") != null) {
 					htmlTable = "<table>" + resultSet.getString("htmlCode") + "</table>";
+				} else {
+					// convert json to html code
+					htmlTable = "<table>";
+					for (int i = 0; i < jsonArrayTable.length(); i++) {
+						htmlTable += "<tr>";
+						JSONArray row = jsonArrayTable.getJSONArray(i);
+						for (int j = 0; j < row.length(); j++) {
+							String cell = row.getString(j);
+							htmlTable += "<td>" + cell + "</td>";
+						}
+						htmlTable += "</tr>";
+					}
+					htmlTable += "</table>";
 				}
 				
 				// let jsoup parse the html code again
