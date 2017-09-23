@@ -24,23 +24,25 @@ public class FeaturesP2 {
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
 	private static String featureWhiteList = "ID, " +
-			//"CUMULATIVE_CONTENT_CONSISTENCY, " +
-			/*"AVG_CELL_LENGTH, " +
-					"AVG_COLS, " +
-					"AVG_ROWS, " +
-					"RATIO_ALPHABETICAL, " +
-					"STD_DEV_COLS, " +*/
-					/*"MAX_ROWS, " +
-					"MAX_COLS, " +
-					"AREA_SIZE, " +*/
-			"RATIO_EMPTY_CELLS, ";// +
-	//"STD_DEV_ROWS, ";
+			"CUMULATIVE_CONTENT_CONSISTENCY, " +
+			"AVG_CELL_LENGTH, " +
+			"AVG_COLS, " +
+			"AVG_ROWS, " +
+			"RATIO_ALPHABETICAL, " +
+			"STD_DEV_COLS, " +
+			"MAX_ROWS, " +
+			"MAX_COLS, " +
+			"AREA_SIZE, " +
+			"RATIO_EMPTY_CELLS, " +
+			"STD_DEV_ROWS, " +
+			"";
 	
 	static {
 		List<String> whiteListFeatures = new LinkedList<>();
-		//whiteListFeatures.add("LOCAL_RATIO_EMPTY");
+		whiteListFeatures.add("LOCAL_RATIO_EMPTY");
 		whiteListFeatures.add("LOCAL_EMPTY_VARIANCE");
-		/*whiteListFeatures.add("LOCAL_AVG_LENGTH");
+		whiteListFeatures.add("LOCAL_DIGIT_AMOUNT_VARIANCE");
+		whiteListFeatures.add("LOCAL_AVG_LENGTH");
 		whiteListFeatures.add("LOCAL_LENGTH_VARIANCE");
 		whiteListFeatures.add("LOCAL_RATIO_ANCHOR");
 		whiteListFeatures.add("LOCAL_RATIO_IMAGE");
@@ -54,21 +56,22 @@ public class FeaturesP2 {
 		whiteListFeatures.add("LOCAL_RATIO_SPECIAL_CHAR");
 		whiteListFeatures.add("LOCAL_RATIO_PERCENTAGE");
 		whiteListFeatures.add("LOCAL_RATIO_CONTAINS_YEAR");
-		whiteListFeatures.add("LOCAL_RATIO_IS_NUMBER");*/
+		whiteListFeatures.add("LOCAL_RATIO_IS_NUMBER");
 		
 		for (String feature : whiteListFeatures) {
 			featureWhiteList += feature + "_COL_0, ";
 			featureWhiteList += feature + "_COL_1, ";
 			featureWhiteList += feature + "_COL_2, ";
+			featureWhiteList += feature + "_COL_3, ";
 			featureWhiteList += feature + "_ROW_0, ";
 			featureWhiteList += feature + "_ROW_1, ";
 			featureWhiteList += feature + "_ROW_2, ";
+			featureWhiteList += feature + "_ROW_3, ";
 		}
 		
 	}
 	
 	/**
-	 * obere liste automatisch erstellen lassen!
 	 * <p>
 	 * neue features:
 	 * - std_dev for empty cells?
@@ -157,6 +160,8 @@ public class FeaturesP2 {
 		localListeners.add(new LocalLengthVariance());
 		localListeners.add(new LocalEmptyRatio());
 		localListeners.add(new LocalEmptyVariance());
+		localListeners.add(new LocalDigitAmountVariance());
+		
 	}
 	
 	public Instance computeFeatures(Element[][] convertedTable) {
@@ -202,12 +207,16 @@ public class FeaturesP2 {
 		
 		// PER-ROW
 		// get the 2 first and last rowS or last row?
-		int[] localRowIndexes = {0, 1, tStats.getTableHeight() - 1};
 		
-		for (int i = 0; i < localRowIndexes.length; i++) {
-			
-			int currentRowIndex = localRowIndexes[i];
-			
+		List<Integer> localRowIndexes = new LinkedList<>();
+		localRowIndexes.add(0);
+		localRowIndexes.add(1);
+		localRowIndexes.add(tStats.getTableHeight() - 2);
+		localRowIndexes.add(tStats.getTableHeight() - 1);
+		
+		int i = 0;
+		
+		for (Integer currentRowIndex : localRowIndexes) {
 			// initialization event
 			for (AbstractTableListener listener : localListeners) {
 				listener.start(tStats);
@@ -237,15 +246,19 @@ public class FeaturesP2 {
 				}
 				
 			}
+			i++;
 		}
 		
 		// PER-COL
 		// get the 2 first and last columns
-		int[] localColIndexes = {0, 1, tStats.getTableWidth() - 1};
+		List<Integer> localColIndexes = new LinkedList<>();
+		localColIndexes.add(0);
+		localColIndexes.add(1);
+		localColIndexes.add(tStats.getTableWidth() - 2);
+		localColIndexes.add(tStats.getTableWidth() - 1);
 		
-		for (int i = 0; i < localColIndexes.length; i++) {
-			
-			int currentColIndex = localColIndexes[i];
+		i = 0;
+		for (Integer currentColIndex : localColIndexes) {
 			
 			// initialization event
 			for (AbstractTableListener listener : localListeners) {
@@ -276,6 +289,7 @@ public class FeaturesP2 {
 				}
 				
 			}
+			i++;
 		}
 		
 		// Create WEKA instance
@@ -1007,6 +1021,50 @@ public class FeaturesP2 {
 			
 			double varSum = 0.0;
 			for (Integer length : cellLengths) {
+				double inner = (length - average);
+				double temp = Math.pow(inner, 2);
+				varSum += temp;
+			}
+			variance = (totalCells > 0) ? (varSum / totalCells) : 0.0;
+		}
+		
+		public HashMap<String, Double> getResults() {
+			HashMap<String, Double> result = new HashMap<String, Double>();
+			result.put(featureName, new Double(variance));
+			return result;
+		}
+	}
+	
+	public class LocalDigitAmountVariance extends AbstractTableListener {
+		
+		private ArrayList<Integer> digitAmounts;
+		private double average, variance;
+		
+		public LocalDigitAmountVariance() {
+			featureName = "LOCAL_DIGIT_AMOUNT_VARIANCE";
+		}
+		
+		public void initialize(TableStats stats) {
+			digitAmounts = new ArrayList<Integer>();
+		}
+		
+		public void onCell(Element content, TableStats stats) {
+			if (content != null) {
+				digitAmounts.add(CellTools.cleanCell(content.text()).replaceAll("\\D", "").length());
+			}
+		}
+		
+		public void finalize() {
+			double sum = 0.0;
+			for (Integer length : digitAmounts) {
+				sum += length;
+			}
+			
+			double totalCells = (double) digitAmounts.size();
+			average = (totalCells > 0) ? (sum / totalCells) : 0.0;
+			
+			double varSum = 0.0;
+			for (Integer length : digitAmounts) {
 				double inner = (length - average);
 				double temp = Math.pow(inner, 2);
 				varSum += temp;

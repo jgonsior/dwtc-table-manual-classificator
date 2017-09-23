@@ -24,6 +24,9 @@ public class SaveClassifiedResultsToDatabase {
 			Instances testDataSet = new Instances(unfilteredDataSet);
 			
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
+			
+			connection.setAutoCommit(false);
+			
 			PreparedStatement preparedStatement = connection.prepareStatement("UPDATE `table` SET label = ? WHERE id=?");
 			
 			
@@ -47,6 +50,8 @@ public class SaveClassifiedResultsToDatabase {
 				
 				preparedStatement.executeUpdate();
 			}
+			
+			connection.commit();
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

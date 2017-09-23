@@ -54,10 +54,10 @@ public class CreateArff {
 			
 			System.out.println("\n----------------------------------------\n");
 			
-			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL LIMIT 100");
+			resultSet = statement.executeQuery("SELECT * FROM `table` WHERE newTableType IS NOT NULL");
 			
-			int hori = 0;
-			int verti = 0;
+			/*int hori = 0;
+			int verti = 0;*/
 			while (resultSet.next()) {
 				
 				//parse database json contents
@@ -78,7 +78,7 @@ public class CreateArff {
 					verti++;
 				}*/
 				
-				//convert json to html code
+				// convert json to html code
 				String htmlTable = "<table>";
 				for (int i = 0; i < jsonArrayTable.length(); i++) {
 					htmlTable += "<tr>";
@@ -95,7 +95,7 @@ public class CreateArff {
 					htmlTable = "<table>" + resultSet.getString("htmlCode") + "</table>";
 				}
 				
-				//let jsoup parse the html code again
+				// let jsoup parse the html code again
 				Document document = Jsoup.parse(htmlTable);
 				
 				Element table = document.select("table").get(0);
@@ -105,7 +105,7 @@ public class CreateArff {
 					return;
 				}
 				
-				//calculate all the features and transform them into a weka readable format :)
+				//calculate all the features and transform them into a weka readable format
 				Instance instance = phase2Features.computeFeatures(convertedTable.get());
 				
 				/*for(int i=0;i<instance.numAttributes();i++) {
@@ -143,7 +143,7 @@ public class CreateArff {
 				
 			}
 			
-			System.out.println("Hori: " + hori + "verti" + verti);
+			//System.out.println("Hori: " + hori + " verti" + verti);
 			ArffSaver arffSaver = new ArffSaver();
 			arffSaver.setInstances(dataSet);
 			arffSaver.setFile(new File("data.arff"));
