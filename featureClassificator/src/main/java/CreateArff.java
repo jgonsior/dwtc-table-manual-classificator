@@ -11,6 +11,9 @@ import weka.core.converters.ArffSaver;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class CreateArff {
 	
@@ -58,6 +61,14 @@ public class CreateArff {
 			
 			/*int hori = 0;
 			int verti = 0;*/
+			
+			HashMap<Integer, ArrayList<Instance>> instances = new HashMap<>();
+			instances.put(1, new ArrayList<>());
+			instances.put(2, new ArrayList<>());
+			instances.put(3, new ArrayList<>());
+			instances.put(4, new ArrayList<>());
+			
+			
 			while (resultSet.next()) {
 				
 				//parse database json contents
@@ -113,7 +124,7 @@ public class CreateArff {
 					System.out.println(instance.attribute(i).name() + ": " + instance.value(i));
 				}
 				System.out.println("#################################");*/
-				instance.setValue(0, resultSet.getInt("id"));
+				//instance.setValue(0, resultSet.getInt("id"));
 				
 				//@TODO: should be changed to an enum!
 				
@@ -138,10 +149,72 @@ public class CreateArff {
 				
 				instance.setValue(instance.classAttribute(), classAttribute);
 				
+				instances.get(classAttribute).add(instance);
+				
+			}
+			
+			//duplicate everything
+			/*
+				"ENTITY"	"1798"
+				"MATRIX"	"846"
+				"OTHER"	"831"
+				"RELATION"	"2302"
+			 */
+			Random random = new Random();
+			for (int i = 0; i < 2302; i++) {
+				Instance instance = null;
+				
+				if (i >= 1798) {
+					instance = instances.get(2).get(random.nextInt(instances.get(2).size()));
+				} else {
+					instance = instances.get(2).get(i);
+				}
+				
 				dataSet.add(instance);
 				
 				dataSet.setClassIndex(instance.classIndex());
+			}
+			
+			for (int i = 0; i < 2302; i++) {
+				Instance instance = null;
 				
+				if (i >= 846) {
+					instance = instances.get(3).get(random.nextInt(instances.get(3).size()));
+				} else {
+					instance = instances.get(3).get(i);
+				}
+				
+				dataSet.add(instance);
+				
+				dataSet.setClassIndex(instance.classIndex());
+			}
+			
+			for (int i = 0; i < 2302; i++) {
+				Instance instance = null;
+				
+				if (i >= 831) {
+					instance = instances.get(4).get(random.nextInt(instances.get(4).size()));
+				} else {
+					instance = instances.get(4).get(i);
+				}
+				
+				dataSet.add(instance);
+				
+				dataSet.setClassIndex(instance.classIndex());
+			}
+			
+			for (int i = 0; i < 2302; i++) {
+				Instance instance = null;
+				
+				if (i >= 2302) {
+					instance = instances.get(1).get(random.nextInt(instances.get(1).size()));
+				} else {
+					instance = instances.get(1).get(i);
+				}
+				
+				dataSet.add(instance);
+				
+				dataSet.setClassIndex(instance.classIndex());
 			}
 			
 			//System.out.println("Hori: " + hori + " verti" + verti);

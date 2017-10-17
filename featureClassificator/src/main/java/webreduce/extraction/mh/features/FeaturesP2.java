@@ -19,11 +19,13 @@ import java.util.regex.Pattern;
 
 public class FeaturesP2 {
 	
-	private static String usedAttributes = ""; //"1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
+	private static String usedAttributes = "1,3,4,6,23,46,52,54,65,77,88,110,121,127,139,148,149,151,156,158,174,190,217,223,224";
+	//"1,2,4,5,11,24,39,47,53,66,84,121,123,128,149,151,152,157,162,179,192,224";
+	// ""; //"1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
 	
 	// most of the local features are calculated in batches for all rows/colums
 	// we need a whitelist to filter out those columns and rows we don't need
-	private static String featureWhiteList = "ID, " +
+	private static String featureWhiteList = //"ID, " +
 			"CUMULATIVE_CONTENT_CONSISTENCY, " +
 			"AVG_CELL_LENGTH, " +
 			"AVG_COLS, " +
@@ -178,7 +180,7 @@ public class FeaturesP2 {
 		HashMap<String, Double> resultMap = new HashMap<String, Double>();
 		
 		// just put a random dummy value here, get's overwritten later anyway
-		resultMap.put("ID", new Double(42));
+		//resultMap.put("ID", new Double(42));
 		
 		TableStats tStats = new TableStats(convertedTable[0].length, convertedTable.length);
 		
