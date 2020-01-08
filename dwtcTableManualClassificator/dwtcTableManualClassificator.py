@@ -79,7 +79,7 @@ def initdbCommand(sourcedirectory):
                         .format(urlsplit(rawData['url']))
                     domainLimit[domain] += 1
                     if (counter[rawData['tableType']] < 2000
-                        and domainLimit[domain] < 100):
+                            and domainLimit[domain] < 100):
                         table = Table(rawData['pageTitle'], rawData['url'],
                                       rawData['title'], rawData['tableType'],
                                       ujson.dumps(rawData['relation']))
@@ -118,8 +118,8 @@ def generateMoreTrainingDataCommand(sourcedirectory, tabletype):
                         .format(urlsplit(rawData['url']))
                     domainLimit[domain] += 1
                     if (counter[rawData['tableType']] < 2000
-                        and domainLimit[domain] < 100
-                        and rawData['tableType'] == tabletype):
+                            and domainLimit[domain] < 100
+                            and rawData['tableType'] == tabletype):
                         table = Table(rawData['pageTitle'], rawData['url'],
                                       rawData['title'], rawData['tableType'],
                                       ujson.dumps(rawData['relation']))
@@ -190,9 +190,14 @@ def getOriginalHtmlFromS3():
     #    print(key.name.encode('utf-8'))
 
     for table in tables:
-        print("Downloading https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:])
-        response = requests.get("https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:],
-                                headers={'Range': 'bytes={}-{}'.format(table.recordOffset, table.recordEndOffset)})
+        print("Downloading https://commoncrawl.s3.amazonaws.com/" +
+              table.s3Link[13:])
+        response = requests.get(
+            "https://commoncrawl.s3.amazonaws.com/" + table.s3Link[13:],
+            headers={
+                'Range':
+                'bytes={}-{}'.format(table.recordOffset, table.recordEndOffset)
+            })
 
         raw_data = BytesIO(response.content)
         # stringio = StringIO(raw_data.read().decode('latin-1'))
@@ -201,12 +206,10 @@ def getOriginalHtmlFromS3():
             pprint(f.read())
 
         print("Done…")
-
         '''with gzip.open("warc.gz", "r") as file:
             for line in file:
                 print(line)'''
         return
-
 
         # common-crawl/crawl-data/CC-MAIN-2014-23/segments/1405997894799.55/warc/CC-MAIN-20140722025814-00066-ip-10-33-131-23.ec2.internal.warc.gz
         # key = Key(publicDatasets, "crawl-data/CC-MAIN-2014-23/segments/1404776400583.60/warc/CC-MAIN-20140707234000-00023-ip-10-180-212-248.ec2.internal.warc.gz")
@@ -218,17 +221,17 @@ def getOriginalHtmlFromS3():
 @app.route('/')
 @app.route('/<int:page>')
 def showTables(page=1):
-    #entries = db.session.query(Table).paginate(page, 100)
-    entries = db.session.query(Table).filter(
-        Table.newTableType != Table.label).paginate(page, 100)
+    entries = db.session.query(Table).paginate(page, 100)
+    #  entries = db.session.query(Table).filter(
+    #  Table.newTableType != Table.label).paginate(page, 100)
     return render_template('show_tables.jinja2', entries=entries)
 
 
 @app.route('/show/<int:pageId>')
 def showTable(pageId):
-    #entries = db.session.query(Table).paginate(pageId, 1)
-    entries = db.session.query(Table).filter(
-        Table.newTableType != Table.label).paginate(pageId, 1)
+    entries = db.session.query(Table).paginate(pageId, 1)
+    #  entries = db.session.query(Table).filter(
+    #  Table.newTableType != Table.label).paginate(pageId, 1)
     #entries = db.session.query(Table).filter(
     #    Table.label == "MATRIX").paginate(pageId, 1)
     meta = entries.items[0]
@@ -242,8 +245,11 @@ def showTable(pageId):
         prev = entries.prev_num
     if entries.has_next:
         next = entries.next_num
-    return render_template('show_table.jinja2', meta=meta, table=table,
-                           prev=prev, next=next)
+    return render_template('show_table.jinja2',
+                           meta=meta,
+                           table=table,
+                           prev=prev,
+                           next=next)
 
 
 @app.route('/changeClass/<int:tableId>/<string:newTableType>')

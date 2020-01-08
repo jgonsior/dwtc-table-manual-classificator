@@ -128,7 +128,8 @@ public class FeaturesP2 {
 		for (String attributeNumberString : usedAttributes.split(",")) {
 			featureNames.add(allFeatureNames.get(Integer.parseInt(attributeNumberString) - 1));
 		}
-		return featureNames;
+
+		return allFeatureNames;
 	}
 	
 	// returns a FastVector containing all attributes plus
