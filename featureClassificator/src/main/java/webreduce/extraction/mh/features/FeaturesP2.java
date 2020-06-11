@@ -102,12 +102,19 @@ public class FeaturesP2 {
 	public FeaturesP2() {
 		attributeList = new ArrayList<Attribute>();
 		attributeVector = new FastVector();
+
+
+		Attribute idAttr = new Attribute("ID");
+		attributeList.add(idAttr);
+		attributeVector.addElement(idAttr);
+
+
 		for (String s : FeaturesP2.getFeatureNames()) {
 			Attribute newAttr = new Attribute(s); // create new Feature with name from whitelist
 			attributeList.add(newAttr);
 			attributeVector.addElement(newAttr);
 		}
-		
+
 		classAttrVector = new FastVector(4);
 		classAttrVector.addElement("LAYOUT");
 		classAttrVector.addElement("RELATION");
@@ -117,6 +124,7 @@ public class FeaturesP2 {
 		classAttr = new Attribute("CLASS", classAttrVector);
 		
 		attributeVector.addElement(classAttr);
+
 	}
 	
 	public static List<String> getFeatureNames() {
@@ -179,10 +187,7 @@ public class FeaturesP2 {
 	
 	public Instance computeFeatures(Element[][] convertedTable) {
 		HashMap<String, Double> resultMap = new HashMap<String, Double>();
-		
-		// just put a random dummy value here, get's overwritten later anyway
-		//resultMap.put("ID", new Double(42));
-		
+
 		TableStats tStats = new TableStats(convertedTable[0].length, convertedTable.length);
 		
 		initializeFeatures();
@@ -320,7 +325,11 @@ public class FeaturesP2 {
 //				resultInstance.setValue(newAttr, resultMap.get(entry));
 //			}
 //		}
-		
+
+		// just put a random dummy value here, get's overwritten later anyway
+		resultMap.put("ID", new Double(42));
+
+
 		return Tools.createInstanceFromData(resultMap, attributeList, attributeVector);
 	}
 	

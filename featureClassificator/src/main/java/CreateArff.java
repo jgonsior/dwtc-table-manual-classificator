@@ -23,7 +23,7 @@ public class CreateArff {
             Instances dataSet = new Instances("TestInstances", phase2Features.getAttrVector(), 0);
 
             Class.forName("org.sqlite.JDBC");
-            Connection connection = DriverManager.getConnection("jdbc:sqlite:dwtcTableManualClassificator/data.db");
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:data.db");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT count(originalTableType), originalTableType FROM `table` GROUP BY originalTableType ");
             while (resultSet.next()) {
@@ -123,7 +123,9 @@ public class CreateArff {
 					System.out.println(instance.attribute(i).name() + ": " + instance.value(i));
 				}
 				System.out.println("#################################");*/
-                //instance.setValue(0, resultSet.getInt("id"));
+
+                instance.setValue(0, resultSet.getInt("id"));
+
 
                 //@TODO: should be changed to an enum!
 
@@ -231,8 +233,8 @@ public class CreateArff {
             arffSaver.setFile(new File("data2.arff"));
             arffSaver.writeBatch();
 
-            TrainAndCompareClassifier trainAndCompareClassifier = new TrainAndCompareClassifier();
-            trainAndCompareClassifier.main(null);
+            //TrainAndCompareClassifier trainAndCompareClassifier = new TrainAndCompareClassifier();
+            //trainAndCompareClassifier.main(null);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
