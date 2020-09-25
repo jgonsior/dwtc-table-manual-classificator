@@ -3,7 +3,7 @@ boto==2.47.0
 click==6.7
 dominate==2.3.1
 filechunkio==1.8
-Flask==0.12.1
+Flask==1.0
 Flask-Bootstrap==3.3.7.1
 Flask-SQLAlchemy==2.2
 google-api-python-client==1.6.2
