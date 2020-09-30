@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import webreduce.extraction.mh.features.FeaturesP2;
+import webreduce.extraction.mh.features.Features2015;
+import webreduce.extraction.mh.features.Features2017;
 import webreduce.extraction.mh.tools.TableConvert;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -18,7 +20,8 @@ public class CreateArff {
 
     public static void main(String[] args) {
         try {
-            FeaturesP2 phase2Features = new FeaturesP2();
+            FeaturesP2 phase2Features = new FeaturesP2()
+                    ;
             TableConvert tableConvert = new TableConvert(2, 2);
             Instances dataSet = new Instances("TestInstances", phase2Features.getAttrVector(), 0);
 
@@ -230,7 +233,7 @@ public class CreateArff {
             //System.out.println("Hori: " + hori + " verti" + verti);
             ArffSaver arffSaver = new ArffSaver();
             arffSaver.setInstances(dataSet);
-            arffSaver.setFile(new File("data2.arff"));
+            arffSaver.setFile(new File("2015_feature_subselection.arff"));
             arffSaver.writeBatch();
 
             //TrainAndCompareClassifier trainAndCompareClassifier = new TrainAndCompareClassifier();

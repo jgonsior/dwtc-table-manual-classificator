@@ -17,13 +17,11 @@ import weka.core.Instance;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class FeaturesP2 {
+public class Features2017 {
 
     private static String usedAttributes = "1,3,4,6,23,46,52,54,65,77,88,110,121,127,139,148,149,151,156,158,174,190,217,223,224";
     //"1,2,4,5,11,24,39,47,53,66,84,121,123,128,149,151,152,157,162,179,192,224";
     // ""; //"1,2,13,15,27,40,47,52,53,54,55,58,60,63,64,65,67,78,88,90,92,94,95,97";
-
-    private static String featureWhiteList2015 = "LOCAL_RATIO_IS_NUMBER_COL_0, AVG_CELL_LENGTH, LOCAL_RATIO_IS_NUMBER_COL_2, LOCAL_RATIO_COLON_ROW_1, LOCAL_RATIO_ANCHOR_ROW_2, LOCAL_LENGTH_VARIANCE_COL_2, LOCAL_AVG_LENGTH_ROW_0, LOCAL_AVG_LENGTH_ROW_2, LOCAL_RATIO_HEADER_ROW_0, CUMULATIVE_CONTENT_CONSISTENCY, STD_DEV_ROWS, RATIO_ALPHABETICAL, LOCAL_RATIO_COMMA_COL_0, LOCAL_RATIO_CONTAINS_NUMBER_ROW_1, LOCAL_RATIO_CONTAINS_NUMBER_ROW_0, STD_DEV_COLS, LOCAL_RATIO_COLON_COL_0, MAX_COLS, LOCAL_RATIO_CONTAINS_NUMBER_COL_2, LOCAL_RATIO_HEADER_COL_1, LOCAL_RATIO_HEADER_COL_2, LOCAL_RATIO_CONTAINS_NUMBER_COL_0, AVG_COLS";
 
     // most of the local features are calculated in batches for all rows/colums
     // we need a whitelist to filter out those columns and rows we don't need
@@ -101,7 +99,7 @@ public class FeaturesP2 {
     private FastVector classAttrVector; // vector of strings of all possible class values
     private Attribute classAttr;
 
-    public FeaturesP2() {
+    public Features2017() {
         attributeList = new ArrayList<Attribute>();
         attributeVector = new FastVector();
 
@@ -139,26 +137,7 @@ public class FeaturesP2 {
             featureNames.add(allFeatureNames.get(Integer.parseInt(attributeNumberString) - 1));
         }
 
-        List<String> featureNames2015 = new LinkedList<>();
-        List<String> prefixes = Arrays.asList("LOCAL_RATIO_CONTAINS_WHITESPACE", "LOCAL_RATIO_SPECIAL_CHAR", "LOCAL_RATIO_PERCENTAGE", "LOCAL_RATIO_CONTAINS_YEAR", "LOCAL_DIGIT_AMOUNT_VARIANCE", "LOCAL_EMPTY_VARIANCE", "LOCAL_RATIO_EMPTY", "MAX_ROWS", "RATIO_EMPTY_CELLS", "AREA_SIZE");
-        outer:
-        for (String featureName :allFeatureNames) {
-            for (String prefix : prefixes){
-                if (featureName.startsWith(prefix)) {
-                    continue outer;
-                }
-            }
-
-            for (String prefix :   new ArrayList<>(Arrays.asList(featureWhiteList2015.split(", ")))){
-                if (featureName.startsWith(prefix)) {
-
-                    featureNames2015.add(featureName);
-                    //continue outer;
-                }
-            }
-            //featureNames2015.add(featureName);
-        }
-        return featureNames2015;
+        return featureNames;
     }
 
     // returns a FastVector containing all attributes plus
