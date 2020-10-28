@@ -13,6 +13,11 @@ A tool for manual classification of dwtc tables. The result can then be used as 
 7. Go to http://127.0.0.1:5000/
 8. Have fun classifiying :)
 
+
+## Dataset
+If you're interested in the underlying dataset, take a look into the WEKA compatible arff files for the features we used for classification. The most recent version of our features is the 2017 one. The corresponding raw table (html code as well as json and some information about where to find the whole webpage in the common crawl) can be found in the sqlite database data.db. 
+
+
 ## License
 Unless explicitly noted otherwise, the content of this package is released under the [GNU Affero General Public License version 3 (AGPLv3)](http://www.gnu.org/licenses/agpl.html)
 
