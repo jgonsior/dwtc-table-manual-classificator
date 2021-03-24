@@ -22,7 +22,7 @@ pyasn1==0.2.3
 pyasn1-modules==0.0.9
 pyparsing==2.2.0
 PyYAML==5.1
-rsa==3.4.2
+rsa==4.1
 six==1.10.0
 SQLAlchemy==1.1.9
 ujson==1.35
