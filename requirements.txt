@@ -9,7 +9,7 @@ Flask-SQLAlchemy==2.2
 google-api-python-client==1.6.2
 greenlet==0.4.12
 -e git+https://github.com/commoncrawl/gzipstream.git@08f4249658b4d6e1a09be01964ee49d29784a2de#egg=gzipstream
-httplib2==0.18.0
+httplib2==0.19.0
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
